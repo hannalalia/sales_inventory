@@ -1,9 +1,13 @@
 <?php 
 	//Suppliers
-  function find_all_suppliers($options=[]) {
+  function find_all_suppliers($search = null,$options=[]) {
     global $db;
 
     $sql = "SELECT * FROM suppliers ";
+    
+    if(!empty($search)){
+      $sql .= "WHERE CompanyName = '" . db_escape($db,$search) . "' ";
+    }
     $sql .= "ORDER BY Id ASC";
     //echo $sql;
     $result = mysqli_query($db, $sql);
@@ -140,10 +144,13 @@
   }
 
   //Categories
-    function find_all_categories($options=[]) {
+    function find_all_categories($search = null, $options=[]) {
     global $db;
 
     $sql = "SELECT * FROM categories ";
+    if(!empty($search)){
+      $sql .= "WHERE CategoryName = '" . db_escape($db,$search) . "' ";
+    }
     $sql .= "ORDER BY Id ASC";
     //echo $sql;
     $result = mysqli_query($db, $sql);
