@@ -1,5 +1,11 @@
 <?php require_once('../../private/initialize.php');?>
-<?php $category_list = find_all_categories();
+<?php 
+if(!isset($_POST['searchBtn']) && empty($_POST['categorySearch'])){
+    $category_list = find_all_categories();
+}else{
+    $category_list = find_all_categories($_POST['categorySearch']);
+}
+
 $category_name_list = find_all_category_name();
 ?>
 <?php require('../../private/shared/public_header.php');?>
