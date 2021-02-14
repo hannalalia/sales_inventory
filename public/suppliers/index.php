@@ -1,5 +1,15 @@
 <?php require_once('../../private/initialize.php');?>
-<?php $supplier_list = find_all_suppliers();$company_name_list = find_all_company_name();
+<?php 
+
+if(!isset($_POST['searchBtn']) && empty($_POST['supplierSearch'])){
+    $supplier_list = find_all_suppliers();
+}else{
+    $supplier_list = find_all_suppliers($_POST['supplierSearch']);
+}
+
+$company_name_list = find_all_company_name();
+
+
 ?>
 <?php include('../../private/shared/public_header.php');?>
 <?php include('../../private/shared/public_navigation.php');?>
