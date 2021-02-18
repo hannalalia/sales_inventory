@@ -27,6 +27,7 @@
     mysqli_free_result($result);
     return $supplier; // returns an assoc. array
   }
+  
   function find_all_company_name($options=[]) {
     global $db;
 
@@ -278,5 +279,166 @@
       exit;
     }
   }
+
+  //PRODUCTS
+   function find_all_products($search = null,$options=[]) {
+    global $db;
+
+    $sql = "SELECT * FROM products ";
+    
+    if(!empty($search)){
+      $sql .= "WHERE ItemName = '" . db_escape($db,$search) . "' ";
+    }
+    $sql .= "ORDER BY ItemName ASC";
+
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    return $result;
+  }
+ function find_product_by_pcode($pCode, $options=[]) {
+    global $db;
+
+    $sql = "SELECT * FROM products ";
+    $sql .= "WHERE ProductCode='" . db_escape($db, $pCode) . "' ";
+
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    $product = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
+    return $product; // returns an assoc. array
+  }
+  function find_all_item_name($options=[]) {
+    global $db;
+
+    $sql = "SELECT ItemName FROM products ";
+    $sql .= "ORDER BY ItemName ASC";
+
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    return $result;
+  }
+
+  function find_all_critical($options=[]) {
+    global $db;
+
+    $sql = "SELECT * FROM products WHERE `Stocks` <= `Re-Order` ORDER BY Stocks DESC";
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    return $result;
+  }
+
+ function validate_product($product) {
+    $errors = [];
+
+    // // Company Name
+    // if(is_blank($supplier['CompanyName'])) {
+    //   $errors[] = "Name cannot be blank.";
+    // } elseif(!has_length($supplier['CompanyName'], ['min' => 2, 'max' => 255])) {
+    //   $errors[] = "Name must be between 2 and 255 characters.";
+    // }
+    // //Address
+    // if(is_blank($supplier['Address'])) {
+    //   $errors[] = "Address cannot be blank.";
+    // }
+    // //Email
+    // if(is_blank($supplier['Email'])) {
+    //   $errors[] = "Email cannot be blank.";
+    // } elseif (!filter_var($supplier['Email'], FILTER_VALIDATE_EMAIL)) {
+    //   $errors[] = "Email must be in a valid format.";
+    // }
+    // //Contact Number
+    // if(is_blank($supplier['ContactNumber'])) {
+    //   $errors[] = "Contact number cannot be blank.";
+    // } elseif(!is_valid_mobile_number($supplier['ContactNumber'])) {
+    //   $errors[] = "Contact number must be in a valid format.";
+    // } 
+
+    return $errors;
+  }
+
+ function insert_product($product) {
+    global $db;
+
+    $errors = validate_product($product);
+    if(!empty($errors)) {
+      return $errors;
+    }
+
+    $sql = "INSERT INTO products ";
+    $sql .= "(`ProductCode`,`ItemName`,`Description`,`Dimensions`,`CategoryId`,`Stocks`,`Re-Order`) ";
+    $sql .= "VALUES (";
+    $sql .= "'" . db_escape($db, $product['ProductCode']) . "',";
+    $sql .= "'" . db_escape($db, $product['ItemName']) . "',";
+    $sql .= "'" . db_escape($db, $product['Description']) . "',";
+    $sql .= "'" . db_escape($db, $product['Dimensions']) . "',";
+    $sql .= db_escape($db, $product['CategoryId']) . ",";
+    $sql .= db_escape($db, $product['Stocks']) . ",";
+    $sql .=  db_escape($db, $product['Re-Order']);
+    $sql .= ")";
+    $result = mysqli_query($db, $sql);
+    // For INSERT statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // INSERT failed
+      echo "<br>";
+      echo $sql;
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
+   function update_product($product) {
+    global $db;
+
+    $errors = validate_product($product);
+    if(!empty($errors)) {
+      return $errors;
+    }
+
+    $sql = "UPDATE products SET ";
+    $sql .= "`ItemName`='" . db_escape($db, $product['ItemName']) . "', ";
+    $sql .= "`Description`='" . db_escape($db, $product['Description']) . "', ";
+    $sql .= "`Dimensions`='" . db_escape($db, $product['Dimensions']) . "', ";
+    $sql .= "`CategoryId`=" . db_escape($db, $product['CategoryId']) . ", ";
+    $sql .= "`Stocks`=" . db_escape($db, $product['Stocks']) . ", ";
+    $sql .= "`Re-Order`=" . db_escape($db, $product['Re-Order']) . " ";
+    $sql .= "WHERE ProductCode='" . db_escape($db, $product['ProductCode']) . "' ";
+    $sql .= "LIMIT 1";
+
+    $result = mysqli_query($db, $sql);
+    // For UPDATE statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // UPDATE failed
+      echo "<br>". $sql ."<br>";
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+
+  }
+
+  function delete_product($product_code) {
+    global $db;
+
+    $sql = "DELETE FROM products ";
+    $sql .= "WHERE ProductCode='" . db_escape($db, $product_code) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+    // For DELETE statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // DELETE failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
+
 
 ?>
