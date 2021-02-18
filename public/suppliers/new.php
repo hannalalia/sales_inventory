@@ -21,14 +21,6 @@ if(isset($_POST['addSupplier'])) {
      $_SESSION['errors'] = $output;
      redirect_to(url_for('/suppliers/index.php'));
   }
-
-} else {
-  // display the blank form
-  $supplier = [];
-  $supplier["CompanyName"] = '';
-  $supplier["Address"] = '';
-  $supplier["ContactNumber"] = '';
-  $supplier["Email"] = '';
 }
 ?>
 
@@ -43,32 +35,26 @@ if(isset($_POST['addSupplier'])) {
       </div>
       <div class="modal-body">
         <form method="POST">
-         <!--  <?php //echo display_errors($errors); ?> -->
-
           <div class="form-group">
             <label for="CompanyName">Company Name</label>
-            <input type="text" class="form-control" name="CompanyName" value="<?php 
-            echo $supplier['CompanyName']?>" >
+            <input type="text" class="form-control" name="CompanyName"  >
           </div>
           <div class="form-group">
             <label for="Address" >Address</label>
-            <textarea  class="form-control" name="Address" id="" cols="10" rows="2" ><?php echo $supplier['Address']?>
-            </textarea> 
+            <textarea  class="form-control" name="Address" id="" cols="10" rows="2" ></textarea> 
           </div>        
           <div class="form-group">
             <label for="ContactNumber">Contact Number</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">+63</span>
+                <span class="input-group-text">+63</span>
               </div>
-              <input type="text" class="form-control" name="ContactNumber" placeholder="9xxxxxxxx" value="<?php 
-            echo $supplier['ContactNumber']?>">
+              <input type="text" class="form-control" name="ContactNumber" placeholder="9xxxxxxxx" >
             </div>
           </div>
           <div class="form-group">
             <label for="Email">Email</label>
-            <input type="email" class="form-control" name="Email" placeholder="john_doe@example.com"value="<?php 
-            echo $supplier['Email']?>" >
+            <input type="email" class="form-control" name="Email" placeholder="john_doe@example.com" >
           </div>        
       </div>
       <div class="modal-footer">

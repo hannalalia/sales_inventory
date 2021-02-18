@@ -29,8 +29,8 @@ $company_name_list = find_all_company_name();
             <input class="form-control col-sm-9 col-10" type="search" name="supplierSearch" placeholder="Company Name" list="companies">
             <datalist id="companies">
             <?php if (mysqli_num_rows($company_name_list)>0){
-            while($companyName= mysqli_fetch_assoc($company_name_list)) { ?>
-                <option><?php echo h($companyName['CompanyName']);?></option>
+            while($company= mysqli_fetch_assoc($company_name_list)) { ?>
+                <option><?php echo h($company['CompanyName']);?></option>
             <?php }}?>
             </datalist>
             <input class="btn btn-primary btn-sm col-sm-3 col-2" type="submit" name="searchBtn" value="Search">

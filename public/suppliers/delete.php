@@ -1,6 +1,5 @@
 <?php require_once('../../private/initialize.php'); ?>
 <?php 
-
 if(isset($_POST['deleteSupplier'])) {
   $Id = $_POST['Id'];
   $supplier = find_supplier_by_id($Id);

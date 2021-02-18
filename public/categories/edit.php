@@ -21,9 +21,6 @@ if(isset($_POST['updateCategory'])) {
      redirect_to(url_for('/categories/index.php'));
   }
 }
-//  else {
-//   $category = find_category_by_id($Id);
-// }
 ?>
 <div class="modal fade" id="editCategoryModal">
 	  <div class="modal-dialog modal-dialog-scrollable">
@@ -36,7 +33,6 @@ if(isset($_POST['updateCategory'])) {
 	      </div>
 	      <div class="modal-body">
 	        <form method="POST">
-	        <!-- <?php //echo display_errors($errors);?> -->
 	        	<input type="hidden" name="Id" id="Id">
 	        	<div class="form-group">
 	        		<label for="CategoryName">Category Name</label>

@@ -18,14 +18,7 @@ if(isset($_POST['addCategory'])) {
      $_SESSION['errors'] = $output;
      redirect_to(url_for('/categories/index.php'));
   }
-
-} else {
-  // display the blank form
-  $category = [];
-  $category["CategoryName"] = '';
-  $category["Description"] = '';
-
-}
+} 
 ?>
 
 <div class="modal fade" id="newCategoryModal">
@@ -39,14 +32,13 @@ if(isset($_POST['addCategory'])) {
       </div>
       <div class="modal-body">
         <form method="POST">
-         <!-- <?php //echo display_errors($errors); ?> -->
           <div class="form-group">
             <label for="CategoryName">Category Name</label>
             <input type="text" class="form-control" name="CategoryName" required>
           </div>
           <div class="form-group">
             <label for="Description" required>Description</label>
-            <textarea  class="form-control" name="Description" id="" cols="10" rows="2"></textarea> 
+            <textarea  class="form-control" name="Description" cols="10" rows="2"></textarea> 
           </div>        
       </div>
       <div class="modal-footer">

@@ -1,6 +1,5 @@
 <?php require_once('../../private/initialize.php'); ?>
 <?php 
-
 if(isset($_POST['deleteCategory'])) {
   $Id = $_POST['Id'];
   $result = delete_category($Id);

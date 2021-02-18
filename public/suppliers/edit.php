@@ -1,6 +1,5 @@
 <?php require_once('../../private/initialize.php');?>
 <?php
-
 if(isset($_POST['updateSupplier'])) {
   $supplier = [];
   $supplier['Id'] = $_POST['Id'];
@@ -23,14 +22,6 @@ if(isset($_POST['updateSupplier'])) {
      $_SESSION['errors'] = $output;
      redirect_to(url_for('/suppliers/index.php'));
   }
-} else {
-  // display the blank form
-  $supplier = [];
-  $supplier['Id'] = '';
-  $supplier["CompanyName"] = '';
-  $supplier["Address"] = '';
-  $supplier["ContactNumber"] = '';
-  $supplier["Email"] = '';
 }
 ?>
 <div class="modal fade" id="editSupplierModal">
@@ -44,7 +35,6 @@ if(isset($_POST['updateSupplier'])) {
 	      </div>
 	      <div class="modal-body">
 	        <form method="POST">
-	        <!-- <?php //echo display_errors($errors); ?> -->
 	        	<input type="hidden" name="Id" id="Id">
 	        	<div class="form-group">
 	        		<label for="CompanyName">Company Name</label>
@@ -58,7 +48,7 @@ if(isset($_POST['updateSupplier'])) {
 	        		<label for="ContactNumber">Contact Number</label>
 	        		<div class="input-group mb-3">
 					<div class="input-group-prepend">
-						<span class="input-group-text" id="basic-addon1">+63</span>
+						<span class="input-group-text">+63</span>
 				  	</div>
 						<input type="text" class="form-control" id="ContactNumber" name="ContactNumber" placeholder="9xxxxxxxxx">
 					</div>
