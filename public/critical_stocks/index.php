@@ -1,6 +1,8 @@
 <?php require_once('../../private/initialize.php');?>
-<?php $category_list = find_all_categories();
+<?php 
 $category_name_list = find_all_category_name();
+$critical_list = find_all_critical();
+
 ?>
 <?php include('../../private/shared/public_header.php');?>
 <?php include('../../private/shared/public_navigation.php');?>
@@ -40,16 +42,24 @@ $category_name_list = find_all_category_name();
     		</tr>	
     	</thead>
     	<tbody>
-    	    <tr>
-                <td>123ABC</td>
-                <td>Dell inspiron </td>
-                <td>Description</td>
-                <td>Brand</td>
-                <td>Laptop</td>
-                <td>12</td>
-                <td>12</td>
-                <td class="notPrintable"><a href="#" class="btn btn-primary btn-sm">Purchase</a></td>
+             <?php if (mysqli_num_rows($critical_list)>0){
+
+                while($critical = mysqli_fetch_assoc($critical_list)) { ?>
+            <tr>
+
+                <td><?php echo h($critical['ProductCode']); ?></td>
+                <td><?php echo h($critical['ItemName']); ?></td>
+                <td><?php echo h($critical['Description']); ?></td>
+                <td></td>
+                <td><?php echo h($critical['CategoryId']); ?></td>
+                <td><?php echo h($critical['Stocks']); ?></td>
+                <td><?php echo h($critical['Re-Order']); ?></td>
+                <td class="notPrintable"><a href="<?php echo url_for('purchase_orders/new.php?'. $critical['ProductCode'])?>" class="btn btn-primary btn-sm">Purchase</a></td>
             </tr>
+            <?php }}else{ ?>
+                <tr><td colspan="7" align="center">No Records Found</td></tr>
+                
+            <?php }?>
     	</tbody>
     </table>
     <button id="printBtn" class="btn btn-primary">Print</button>
