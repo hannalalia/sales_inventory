@@ -1,17 +1,17 @@
 <?php require_once('../../private/initialize.php'); ?>
 <?php 
 
-// if(isset($_POST['deleteStore'])) {
-//   $Id = $_POST['Id'];
-//   $supplier = find_supplier_by_id($Id);
-//   $result = delete_supplier($Id);
-//    if($result === true) {
-//     $_SESSION['message'] =  $supplier['CompanyName'] . ' has been deleted';
-//     redirect_to(url_for('/suppliers/index.php'));
-//   } else {
-//     $errors = $result;
-//   }
-// } 
+if(isset($_POST['deleteStore'])) {
+  $Id = $_POST['Id'];
+  $store = find_store_by_id($Id);
+  $result = delete_store($Id);
+   if($result === true) {
+    $_SESSION['message'] =  $store['Name'] . ' has been deleted';
+    redirect_to(url_for('/stores/index.php'));
+  } else {
+    $errors = $result;
+  }
+} 
 
 ?>
 
@@ -39,14 +39,14 @@
 	        		<b>Address:</b>
 	        		<p id="AddressDel"></p>  
 	        	</div>
-	        	<div>
+	        	<!-- <div>
 	        		<b>Contact Number:</b> 
 	        		<p id="ContactNumberDel"></p>
 	        	</div>
 	        	<div>
 	        		<b>POS Devices:</b>
 	        		<p id="POSDel"></p> 
-	        	</div>        
+	        	</div>   -->      
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

@@ -1,6 +1,7 @@
 <?php require_once('../../private/initialize.php');?>
 <?php 
 $category_list = find_all_categories();
+$store_list = find_all_stores();
 
 if(isset($_POST['addProduct'])) {
   $product['ProductCode'] = $_POST['ProductCode'] ?? '';
@@ -89,6 +90,14 @@ if(isset($_POST['addProduct'])) {
             <?php }?>
             </select>            
           </div>
+         <!--  <div>
+            <label for="Stores">Available in store:</label> <br>        
+            <?php while($store = mysqli_fetch_assoc($store_list)){ ?>
+              <input class="m-1" type="checkbox" name="<?php echo $store['Id'];?>" value="<?php echo $store['Id'];?>">
+              <label for="<?php echo $store['Id'];?>"><?php echo $store['Name'];?></label>
+            <?php }?>
+
+          </div> -->
           <div class="form-group">
             <label for="Stocks">Stocks On Hand</label>
             <input type="number" class="form-control" name="Stocks"  min="0">

@@ -1,35 +1,26 @@
 <?php require_once('../../private/initialize.php');?>
 <?php 
-// if(isset($_POST['addStore'])) {
-//   $supplier['CompanyName'] = $_POST['CompanyName'] ?? '';
-//   $supplier['Address'] = $_POST['Address'] ?? '';
-//   $supplier['ContactNumber'] = $_POST['ContactNumber'] ?? '';
-//   $supplier['Email'] = $_POST['Email'] ?? '';
+if(isset($_POST['addStore'])) {
+  $store['Name'] = $_POST['Name'] ?? '';
+  $store['Address'] = $_POST['Address'] ?? '';
 
-//   $result = insert_supplier($supplier);
-//   if($result === true) {
-//     $_SESSION['message'] = $supplier['CompanyName'] . ' has been added';    
-//     redirect_to(url_for('/suppliers/index.php'));
+  $result = insert_store($store);
+  if($result === true) {
+    $_SESSION['message'] = $store['Name'] . ' has been added';    
+    redirect_to(url_for('/stores/index.php'));
 
-//   } else {
-//       $errors = $result;
-//       $output = '';
-//       $output .= "Failed to insert supplier:";
-//       foreach($errors as $error) {
-//         $output .= " " . h($error);
-//       }
-//      $_SESSION['errors'] = $output;
-//      redirect_to(url_for('/suppliers/index.php'));
-//   }
+  } else {
+      $errors = $result;
+      $output = '';
+      $output .= "Failed to insert store:";
+      foreach($errors as $error) {
+        $output .= " " . h($error);
+      }
+     $_SESSION['errors'] = $output;
+     redirect_to(url_for('/stores/index.php'));
+  }
 
-// } else {
-//   // display the blank form
-//   $supplier = [];
-//   $supplier["CompanyName"] = '';
-//   $supplier["Address"] = '';
-//   $supplier["ContactNumber"] = '';
-//   $supplier["Email"] = '';
-// }
+}
 ?>
 
 <div class="modal fade" id="newStoreModal">
@@ -49,10 +40,10 @@
           </div>
           <div class="form-group">
             <label for="Address" >Address</label>
-            <textarea  class="form-control" name="Address" id="" cols="10" rows="2" >
+            <textarea  class="form-control" name="Address" cols="10" rows="2" >
             </textarea> 
           </div>        
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="ContactNumber">Contact Number</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -60,11 +51,11 @@
               </div>
               <input type="text" class="form-control" name="ContactNumber" placeholder="9xxxxxxxx" value="">
             </div>
-          </div>
-          <div class="form-group">
+          </div> -->
+         <!--  <div class="form-group">
             <label for="pos">POS Devices</label>
             <input type="number" class="form-control" name="pos" value="" >
-          </div>        
+          </div>       -->  
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

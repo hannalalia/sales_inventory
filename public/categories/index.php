@@ -1,35 +1,35 @@
 <?php require_once('../../private/initialize.php');?>
 <?php 
-if(!isset($_POST['searchBtn']) && empty($_POST['categorySearch'])){
+//if(!isset($_POST['searchBtn']) && empty($_POST['categorySearch'])){
     $category_list = find_all_categories();
-}else{
-    $category_list = find_all_categories($_POST['categorySearch']);
-}
+// }else{
+//     $category_list = find_all_categories($_POST['categorySearch']);
+// }
 
-$category_name_list = find_all_category_name();
+// $category_name_list = find_all_category_name();
 ?>
 <?php require('../../private/shared/public_header.php');?>
 <?php require('../../private/shared/public_navigation.php');?>
 
   	<div class="container">
-    <div class="row mx-1">      
+     <!-- <div class="row mx-1">   -->    
      	<?php  echo display_session_errors(); ?>
         <?php echo display_session_message(); get_and_clear_session_errors();  ?>
-      	<h2 class="my-3 col-sm-7 col-12 text-sm-left text-center">List of Categories</h2>
-        <form method="post" class="col-sm-5 col-12 my-3">
+      	<h2 class="my-3  text-center">List of Categories</h2>
+        <!-- <form method="post" class="col-sm-5 col-12 my-3">
             <div class="row">
             <input class="form-control col-sm-9 col-10" type="search" name="categorySearch" placeholder="Category Name" list="categories">
             <datalist id="categories">
-            <?php if (mysqli_num_rows($category_name_list)>0){
-            while($categoryName= mysqli_fetch_assoc($category_name_list)) { ?>
-                <option><?php echo h($categoryName['CategoryName']);?></option>
-            <?php }}?>
+            <?php //if (mysqli_num_rows($category_name_list)>0){
+           // while($categoryName= mysqli_fetch_assoc($category_name_list)) { ?>
+                <option><?php //echo h($categoryName['CategoryName']);?></option>
+            <?php //}}?>
             </datalist>
             <input class="btn btn-primary btn-sm col-sm-3 col-2" type="submit" name="searchBtn" value="Search">
             </div>
-        </form>
-    </div>
-    <table class="mx-auto table table-sm table-hover table-responsive-sm">
+        </form> -->
+  <!--   </div>  -->
+    <table class="mx-auto table table-sm table-hover table-responsive-sm text-center" id="cat_table">
     	<thead class="thead-light">
     		<tr>
     			<th>#</th>
@@ -70,5 +70,20 @@ $category_name_list = find_all_category_name();
 <?php  get_and_clear_session_message();?>
 <?php require('../../private/shared/public_footer.php');?>
 <script type="text/javascript" src="<?php echo url_for('resources/js/populate_category.js')?>"></script>
+<script >
+$(document).ready( function () {
+    $('#cat_table').DataTable({
+        "order": [1,"asc"],
+        "columnDefs": [{
+            "targets": [2],
+             "orderable":false
+        },        {
+            "targets": [2],
+            "searchable": false 
+        }]
+
+    });
+} );
+</script>
 </body>
 </html>

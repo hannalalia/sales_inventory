@@ -19,7 +19,7 @@ $(".editProduct").on('click',function(){
 				$('#Length').val(length);
 				$('#Width').val(width);
 				$('#Height').val(height);
-				$('#Category').val(data[4]);
+				$("#Category option:contains(" + data[4]+ ")").attr('selected', 'selected');
 				$('#Stocks').val(data[5]);
 				$('#Re-Order').val(data[6]);
 		});
