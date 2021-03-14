@@ -3,6 +3,7 @@
 
 // if(!isset($_POST['searchBtn']) && empty($_POST['productSearch'])){
 $products_list = find_all_products();
+
 // }else{
 //     $products_list = find_all_products($_POST['productSearch']);
 // }
@@ -48,6 +49,7 @@ $products_list = find_all_products();
 	    		<th>Description</th>
                 <th>Dimensions(l x w x h)</th>
                 <th>Category</th>
+                <th>Price</th>
 	    		<th>Stock On Hand</th>
 	    		<th>Re-Order Level</th>
 	    		<th class="notPrintable">Edit</th>
@@ -59,8 +61,8 @@ $products_list = find_all_products();
     	    <?php if (mysqli_num_rows($products_list)>0){
 
     	    	while($product = mysqli_fetch_assoc($products_list)) { 
-                    $Category_Name=find_category_name_by_id($product['CategoryId']);
-                    while($row = mysqli_fetch_row($Category_Name)) {
+                    $category=find_category_by_id($product['CategoryId']);
+                    // while($row = mysqli_fetch_row($Category_Name)) {
                    
                     ?>
 
@@ -69,14 +71,14 @@ $products_list = find_all_products();
     			<td><?php echo h($product['ItemName']); ?></td>
     			<td><?php echo h($product['Description']); ?></td>
     			<td><?php echo h($product['Dimensions']); ?></td>
-    			<td><?php echo $row[0]; ?></td>
-
+                <td><?php echo h($category['CategoryName'])//$row[0]; ?></td>
+    			<td><?php echo h($product['SellingPrice']); ?></td>
                 <td><?php echo h($product['Stocks']); ?></td>
                 <td><?php echo h($product['Re-Order']); ?></td>
 	    		<td class="notPrintable"><a class="btn btn-sm bg-transparent text-danger editProduct" data-target="#editProductModal"><i data-feather="edit" width="22" heigth="22" ></i></a></td>
     			<td class="notPrintable"><a class="btn btn-sm bg-transparent text-danger deleteProduct" data-target="#deleteProductModal"><i data-feather="trash-2"></i></a></td>
     		</tr>
-    		<?php }}}else{ ?>
+    		<?php }}else{ ?>
     			<tr class="notPrintable"><td colspan="9" align="center">No Records Found</td></tr>
     			
     		<?php }?>
@@ -101,7 +103,7 @@ $products_list = find_all_products();
 <script >
 $(document).ready( function () {
     $('#printTable').DataTable({
-        "order": [1,"desc"],
+        "order": [1,"asc"],
         "columnDefs": [{
             "targets": [0,2,3,7,8],
              "orderable":false

@@ -3,6 +3,7 @@
 if(isset($_POST['addStore'])) {
   $store['Name'] = $_POST['Name'] ?? '';
   $store['Address'] = $_POST['Address'] ?? '';
+  $store['ContactNumber'] = $_POST['ContactNumber'] ?? '';
 
   $result = insert_store($store);
   if($result === true) {
@@ -40,10 +41,9 @@ if(isset($_POST['addStore'])) {
           </div>
           <div class="form-group">
             <label for="Address" >Address</label>
-            <textarea  class="form-control" name="Address" cols="10" rows="2" >
-            </textarea> 
+            <textarea  class="form-control" name="Address" cols="10" rows="2" ></textarea> 
           </div>        
-          <!-- <div class="form-group">
+          <div class="form-group">
             <label for="ContactNumber">Contact Number</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
@@ -51,11 +51,7 @@ if(isset($_POST['addStore'])) {
               </div>
               <input type="text" class="form-control" name="ContactNumber" placeholder="9xxxxxxxx" value="">
             </div>
-          </div> -->
-         <!--  <div class="form-group">
-            <label for="pos">POS Devices</label>
-            <input type="number" class="form-control" name="pos" value="" >
-          </div>       -->  
+          </div> 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

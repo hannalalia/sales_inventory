@@ -31,22 +31,18 @@ if(isset($_POST['deleteStore'])) {
 	        		<b>Id:</b> 
 	        		<p class="d-inline" id="IdDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Name:</b> 
-	        		<p id="NameDel"></p>
+	        		<p  class="d-inline" id="NameDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Address:</b>
-	        		<p id="AddressDel"></p>  
+	        		<p  class="d-inline" id="AddressDel"></p>  
 	        	</div>
-	        	<!-- <div>
+	        	<div class="mb-3">
 	        		<b>Contact Number:</b> 
-	        		<p id="ContactNumberDel"></p>
-	        	</div>
-	        	<div>
-	        		<b>POS Devices:</b>
-	        		<p id="POSDel"></p> 
-	        	</div>   -->      
+	        		<p  class="d-inline" id="ContactNumberDel"></p>
+	        	</div>    
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

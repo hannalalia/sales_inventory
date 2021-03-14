@@ -32,25 +32,29 @@ if(isset($_POST['deleteProduct'])) {
 	        		<b>Product Code:</b> 
 	        		<p class="d-inline" id="ProductCodeDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Item Name:</b> 
-	        		<p id="ItemNameDel"></p>
+	        		<p class="d-inline" id="ItemNameDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Description:</b>
-	        		<p id="DescriptionDel"></p>  
+	        		<p class="d-inline" id="DescriptionDel"></p>  
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Dimensions:</b> 
-	        		<p id="DimensionsDel"></p>
+	        		<p class="d-inline" id="DimensionsDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Category:</b>
-	        		<p id="CategoryDel"></p> 
+	        		<p class="d-inline" id="CategoryDel"></p> 
 	        	</div> 
-	        	<div>
+	        	<div class="mb-3">
+	        		<b>Selling Price:</b>
+	        		<p class="d-inline" id="SellingPriceDel"></p> 
+	        	</div> 
+	        	<div class="mb-3">
 	        		<b>Stocks On Hand:</b>
-	        		<p id="StocksDel"></p> 
+	        		<p class="d-inline" id="StocksDel"></p> 
 	        	</div>         
 	      </div>
 	      <div class="modal-footer">

@@ -25,13 +25,13 @@ if(isset($_POST['deleteCategory'])) {
 	        		<b>Id:</b> 
 	        		<p class="d-inline" id="IdDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Category Name:</b> 
-	        		<p id="CategoryNameDel"></p>
+	        		<p class="d-inline" id="CategoryNameDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Description:</b>
-	        		<p id="DescriptionDel"></p>  
+	        		<p class="d-inline" id="DescriptionDel"></p>  
 	        	</div>   
 	      </div>
 	      <div class="modal-footer">

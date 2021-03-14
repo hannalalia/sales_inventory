@@ -7,6 +7,7 @@ if(isset($_POST['addProduct'])) {
   $product['ProductCode'] = $_POST['ProductCode'] ?? '';
   $product['ItemName'] = $_POST['ItemName'] ?? '';
   $product['Description'] = $_POST['Description'] ?? '';
+  $product['SellingPrice'] = $_POST['SellingPrice'] ?? '';
 
   $length = $_POST['length'] ?? '';
   $width= $_POST['width'] ?? '';
@@ -89,6 +90,10 @@ if(isset($_POST['addProduct'])) {
               <option value="<?php echo $category['Id'];?>"><?php echo $category['CategoryName'];?></option>
             <?php }?>
             </select>            
+          </div>
+          <div class="form-group">
+            <label for="SellingPrice">Selling Price</label>
+            <input type="number" class="form-control" name="SellingPrice" value="" >
           </div>
          <!--  <div>
             <label for="Stores">Available in store:</label> <br>        

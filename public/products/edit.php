@@ -11,12 +11,13 @@ if(isset($_POST['updateProduct'])) {
   $height = $_POST['height'] ?? '';
   $product['Dimensions'] = $length . " x " . $width . " x " . $height;
   $product['CategoryId'] = $_POST['CategoryId'] ?? '';
+  $product['SellingPrice'] = $_POST['SellingPrice'] ?? '';
   $product['Stocks'] = $_POST['Stocks'] ?? '';
   $product['Re-Order'] = $_POST['Re-Order'] ?? '';
 
   $result = update_product($product);
   if($result === true) {
-    $_SESSION['message'] = $product['ItemName']. ' has been updated';
+    $_SESSION['message'] = $product['ItemName']. ' - ' . $product['ProductCode'] . ' has been updated';
     redirect_to(url_for('/products/index.php'));
   } else {
     $errors = $result;
@@ -56,7 +57,7 @@ if(isset($_POST['updateProduct'])) {
           </div> 
           <div class="form-group">
             <label for="length">Length</label>
-            <input type="number" class="form-control" name="length" id="Length"  min="0">
+            <input type="text" class="form-control" name="length" id="Length"  min="0">
           </div>
           <!-- <div class="input-group">
             <input type="text" class="form-control" aria-label="Text input with dropdown button" name="length" placeholder="Length">
@@ -71,11 +72,11 @@ if(isset($_POST['updateProduct'])) {
           </div> -->
           <div class="form-group">
             <label for="width"> Width</label>
-            <input type="number" class="form-control" name="width" id="Width"  min="0">
+            <input type="text" class="form-control" name="width" id="Width"  min="0">
           </div>
           <div class="form-group">
             <label for="height">Height</label>
-            <input type="number" class="form-control" name="height" id="Height"  min="0">
+            <input type="text" class="form-control" name="height" id="Height"  min="0">
           </div>
           <div class="form-group">
             <label for="CategoryId">Category</label>
@@ -83,8 +84,11 @@ if(isset($_POST['updateProduct'])) {
               <?php while($category = mysqli_fetch_assoc($category_list)){ ?>
               <option value="<?php echo $category['Id'];?>"><?php echo $category['CategoryName'];?></option>
             <?php }?>
-            </select>
-            
+            </select>           
+          </div>
+          <div class="form-group">
+            <label for="SellingPrice">Selling Price</label>
+            <input type="text" class="form-control" name="SellingPrice" id="SellingPrice" value="" >
           </div>
           <div class="form-group">
             <label for="Stocks">Stocks On Hand</label>

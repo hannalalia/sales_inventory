@@ -6,7 +6,8 @@ function printData()
     let title =  document.getElementById("title");
     $(toPrint).find(".notPrintable").remove();
 
-    newWin= window.open("");
+    newWin= window.open("",'_blank');
+    newWin.document.open();
 
     newWin.document.write(
     `<html><style type='text/css' media="print">

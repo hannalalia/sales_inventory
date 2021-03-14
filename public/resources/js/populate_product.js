@@ -20,8 +20,9 @@ $(".editProduct").on('click',function(){
 				$('#Width').val(width);
 				$('#Height').val(height);
 				$("#Category option:contains(" + data[4]+ ")").attr('selected', 'selected');
-				$('#Stocks').val(data[5]);
-				$('#Re-Order').val(data[6]);
+				$("#SellingPrice").val(data[5])
+				$('#Stocks').val(data[6]);
+				$('#Re-Order').val(data[7]);
 		});
 
 		$(".deleteProduct").on('click',function(){
@@ -40,5 +41,6 @@ $(".editProduct").on('click',function(){
 				$('#DescriptionDel').text(data[2]);
 				$('#DimensionsDel').text(data[3]);
 				$('#CategoryDel').text(data[4]);
-				$('#StocksDel').text(data[5]);
+				$('#SellingPriceDel').text(data[5]);
+				$('#StocksDel').text(data[6]);
 		});

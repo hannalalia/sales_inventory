@@ -4,7 +4,10 @@ $supplier_list= find_all_suppliers();
 $product_list = find_all_products();
 $store_list=find_all_stores();
 
-
+if(isset($_GET['ProductCode'])){
+  $items = $_GET['ProductCode'];
+  echo $items[0];
+}
 ?>
 <?php require('../../private/shared/public_header.php');?>
 <?php require('../../private/shared/public_navigation.php');?>
@@ -39,6 +42,10 @@ $store_list=find_all_stores();
     <div class="form-group row">
       <label for="delivery_date" class="col-sm-2 col-form-label">Expected Delivery: </label>
       <input type="date"  id="delivery_date" class="form-control col-sm-6" required>
+    </div>
+    <div class="form-group row">
+        <label for="additional_cost" class="col-sm-2 col-form-label">Additional Cost: </label>
+        <input type="text" class="form-control col-sm-6" id="additional_cost" required>
     </div>
     
     <table class="mx-auto table table-sm table-hover table-responsive-md text-center">
@@ -123,6 +130,7 @@ $(document).ready(function(){
     let store = $('#store').val();
     let po_date = $('#po_date').val();
     let delivery = $('#delivery_date').val();
+    let additional_cost = $('#additional_cost').val();
     let status = 'Pending';
     let itemRow = [];
 
@@ -144,7 +152,7 @@ $(document).ready(function(){
         }
       });
       if ($('#delivery_date').valid() &&  $('#po_date').valid()){
-          $.post( "create_po.php", {supplier,store,po_date,delivery,status,itemRow} )
+          $.post( "create_po.php", {supplier,store,po_date,delivery,status,additional_cost,itemRow} )
            .done(function(id) {
               // alert( "Purchase order created" );           
               location.href = 'view.php?id='+ id;

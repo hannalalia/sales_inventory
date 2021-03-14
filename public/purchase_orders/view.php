@@ -7,11 +7,12 @@
 
 
 if($qty_sum_arr['sumQtyReceived']>0 && $qty_sum_arr['sumQtyReceived'] == $qty_sum_arr['sumQty']){
-  update_po_status($id,'Fully Received');
+  $date_received =date('Y-m-d');
+  update_po_status_received_on($id,'Fully Received',$date_received);
 }elseif($qty_sum_arr['sumQtyReceived']>0 && $qty_sum_arr['sumQtyReceived'] != $qty_sum_arr['sumQty']){
-  update_po_status($id,'Partially Received');
+  update_po_status_received_on($id,'Partially Received');
 }else{
-  update_po_status($id,'Pending');
+  update_po_status_received_on($id,'Pending');
 }
 
 //TODO update stocks in inventory when received
@@ -64,13 +65,14 @@ if(isset($_POST['received'])) {
                      echo $store['Name'];?></p>
   </div>
 <!--   <div>
-  	<p>Status: <?php echo $po['status']?></p>
+  	<p>Status: <?php// echo $po['status']?></p>
   </div>
  -->
  <table class="mx-auto table table-sm table-hover table-responsive-md">
     <thead class="thead-light">
         <tr>
-          <th>Item</th>
+         <!--  <th>Product Code</th> -->
+          <th>Item Name</th>
           <th>Purchase Cost</th>
           <th>Quantity</th>
           <th>Amount</th>
@@ -82,7 +84,12 @@ if(isset($_POST['received'])) {
     <?php if (mysqli_num_rows($product_list)>0){
      while($product = mysqli_fetch_assoc($product_list)) { ?>
     	<tr>
-        <td><?php echo h($product['product_code']); ?></td>
+        <!-- <td><?php //echo h($product['product_code']); ?></td> -->
+        <td><?php //echo h($product['product_code']); 
+        $item = find_product_by_pcode($product['product_code']);
+        echo $item['ItemName'];
+
+        ?></td>
         <td><?php echo h($product['cost']); ?></td>
         <td class="dbQty"><?php echo h($product['quantity']); ?></td>
         <td><?php echo h($product['amount']); ?></td>
@@ -145,6 +152,7 @@ if(isset($_POST['received'])) {
             $('#Quantity').attr('min' , 0);
             $('#Quantity').attr('max', maxQty);
             $('#Quantity').attr('value', 0);
+            console.log(product)
         })
 
         $('#Quantity').on('change',function(){

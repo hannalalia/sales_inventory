@@ -29,15 +29,15 @@ $critical_list = find_all_critical();
             </div>
         </form> -->
 <!--     </div> -->
-    <form method="get" > <!-- action="<?php //echo url_for('purchase_orders/new.php')?>" -->
+    <form method="get"  action="<?php echo url_for('purchase_orders/new.php')?>" -->
     <table class="mx-auto table table-sm table-hover table-responsive-lg" id="printTable">
     	<thead class="thead-light">
     		<tr>
     			<th>Product Code</th>
     			<th>Item Name</th>
                 <th>Description</th>
-                <th>Brand</th>
 	    		<th>Category</th>
+                <th>Price</th>
 	    		<th>Stock On Hand</th>
 	    		<th>Re-Order</th>
                 <th class="notPrintable">Purchase</th>
@@ -48,8 +48,8 @@ $critical_list = find_all_critical();
 
                 while($critical = mysqli_fetch_assoc($critical_list)) {
 
-                     $Category_Name=find_category_name_by_id($critical['CategoryId']);
-                    while($row = mysqli_fetch_row($Category_Name)) {
+                     $category=find_category_by_id($critical['CategoryId']);
+                    // while($row = mysqli_fetch_row($Category_Name)) {
                    
                  ?>
             <tr>
@@ -57,15 +57,15 @@ $critical_list = find_all_critical();
                 <td><?php echo h($critical['ProductCode']); ?></td>
                 <td><?php echo h($critical['ItemName']); ?></td>
                 <td><?php echo h($critical['Description']); ?></td>
-                <td></td>
-                <td><?php echo h($row[0]); ?></td>
+                <td><?php echo h($category['CategoryName']); ?></td>
+                <td><?php echo h($critical['SellingPrice']); ?></td>
                 <td><?php echo h($critical['Stocks']); ?></td>
                 <td><?php echo h($critical['Re-Order']); ?></td>
                 <td class="notPrintable"><!-- <a href="<?php echo url_for('purchase_orders/new.php?'. $critical['ProductCode'])?>" class="btn btn-primary btn-sm">Purchase</a> -->
                 <input type="checkbox" name="ProductCode[]" value="<?php  echo $critical['ProductCode'];?>">
                 </td>
             </tr>
-            <?php }}}else{ ?>
+            <?php }}else{ ?>
                 <tr><td colspan="7" align="center">No Records Found</td></tr>
                 
             <?php }?>

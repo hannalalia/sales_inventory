@@ -7,6 +7,7 @@ $store_id = $_POST['store'] ?? '';
 $po_date = $_POST['po_date'] ?? '';
 $delivery = $_POST['delivery'] ?? '';
 $status = $_POST['status'] ?? '';
+$additional_cost = $_POST['additional_cost'] ?? '';
 $items = $_POST['itemRow'] ?? '';
 $subtotal = 0;
 settype($delivery, "string");
@@ -19,7 +20,7 @@ $subtotal += $amount;
 
 $sql = "INSERT INTO purchase_orders ";
 $sql .= "(purchase_order_id,supplier_id,store_id,order_date,
-delivery_date,status,subtotal) ";
+delivery_date,status,subtotal,additional_cost) ";
 $sql .= "VALUES( ";
 $sql .= "'" . db_escape($db, $po_id) . "',";
 $sql .= "'" . db_escape($db, $supplier_id) . "',";
@@ -27,7 +28,9 @@ $sql .= "'" . db_escape($db, $store_id) . "',";
 $sql .= "'" . db_escape($db, $po_date) . "',";
 $sql .= "'" . db_escape($db, $delivery) . "',";
 $sql .= "'" . db_escape($db, $status) . "',";
-$sql .= "'" . db_escape($db, $subtotal) . "'";
+$sql .= "'" . db_escape($db, $subtotal) . "',";
+$sql .= "'" . db_escape($db, $additional_cost) . "'";
+
 $sql .= ")";
 mysqli_query($db, $sql);
    // For INSERT statements, $result is true/false

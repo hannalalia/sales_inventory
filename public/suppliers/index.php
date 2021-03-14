@@ -88,7 +88,7 @@
 <script >
 $(document).ready( function () {
     $('#printTable').DataTable({
-        "order": [1,"desc"],
+        "order": [1,"asc"],
         "columnDefs": [{
             "targets": [0,2,3,4,5,6],
              "orderable":false

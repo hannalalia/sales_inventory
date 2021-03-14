@@ -30,21 +30,21 @@ if(isset($_POST['deleteSupplier'])) {
 	        		<b>Id:</b> 
 	        		<p class="d-inline" id="IdDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Company Name:</b> 
-	        		<p id="CompanyNameDel"></p>
+	        		<p class="d-inline" id="CompanyNameDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Address:</b>
-	        		<p id="AddressDel"></p>  
+	        		<p class="d-inline" id="AddressDel"></p>  
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Contact Number:</b> 
-	        		<p id="ContactNumberDel"></p>
+	        		<p class="d-inline" id="ContactNumberDel"></p>
 	        	</div>
-	        	<div>
+	        	<div class="mb-3">
 	        		<b>Email:</b>
-	        		<p id="EmailDel"></p> 
+	        		<p class="d-inline" id="EmailDel"></p> 
 	        	</div>        
 	      </div>
 	      <div class="modal-footer">

@@ -18,9 +18,6 @@ $po_list = find_all_po();
 <?php require('../../private/shared/public_navigation.php');?>
 
   	<div class="container">
- 
-     	<?php  echo display_session_errors(); ?>
-        <?php echo display_session_message(); get_and_clear_session_errors();  ?>
       	<h2 class="my-3 text-center">Purchase Orders</h2>
       <!--  <form method="post" class="col-sm-5 col-12 my-3">
             <div class="form-group row">
@@ -64,7 +61,7 @@ $po_list = find_all_po();
 	    		<th>Status</th>
                 <th>Expected On</th>
                 <th>Total Cost</th>
-                <th>View</th>
+                <th>View/Receive</th>
     		</tr>
     		
     	</thead>
@@ -84,7 +81,7 @@ $po_list = find_all_po();
                      echo $store['Name'];?></td>
                 <td><?php echo h($po['status']); ?></td>
                 <td><?php echo h($po['delivery_date']); ?></td>
-                <td ><?php echo h($po['subtotal']); ?></td>
+                <td ><?php echo h($po['subtotal'] + $po['additional_cost']); ?></td>
     			<td><a class="btn btn-sm bg-transparent text-secondary"  href="<?php echo url_for('purchase_orders/view.php?id='. $po['purchase_order_id'])?>">
                     <i data-feather="eye"></i>
                 </a></td>
@@ -96,8 +93,8 @@ $po_list = find_all_po();
     	</tbody>
     </table>
     <a class="btn btn-primary text-light m-2" href="<?php echo url_for('purchase_orders/new.php')?>" >Create Purchase Order</a>
+    <a class="btn btn-primary text-light m-2" href="<?php echo url_for('purchase_orders/invoice.php')?>" >View Invoices</a>
     </div>
-<?php  get_and_clear_session_message();?>
 <?php require('../../private/shared/public_footer.php');?>
 <script type="text/javascript" src="<?php echo url_for('resources/js/populate_category.js')?>"></script>
 <script >
