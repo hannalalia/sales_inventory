@@ -194,17 +194,19 @@
     return $category; // returns an assoc. array
   }
 
-   function find_category_name_by_id($id, $options=[]) {
-    global $db;
+  //  function find_category_name_by_id($id, $options=[]) {
+  //   global $db;
 
-    $sql = "SELECT CategoryName FROM categories ";
-    $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
+  //   $sql = "SELECT CategoryName FROM categories ";
+  //   $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
 
-    $result = mysqli_query($db, $sql);
-    confirm_result_set($result);
+  //   $result = mysqli_query($db, $sql);
+  //   confirm_result_set($result);
+  //   $category_name = mysqli_fetch_assoc($result);
+  //   mysqli_free_result($result);
 
-    return $result; // returns an assoc. array
-  }
+  //   return $category_name; // returns an assoc. array
+  // }
   
 
   function validate_category($category) {
@@ -340,7 +342,7 @@
  function validate_product($product) {
     $errors = [];
 
-    if(is_blank($product['ProductCode']) ||is_blank($product['ItemName']) || is_blank($product['CategoryId']) || is_blank($product['Stocks']) || is_blank($product['Re-Order']) ){
+    if(is_blank($product['ProductCode']) ||is_blank($product['ItemName']) || is_blank($product['CategoryId']) || is_blank($product['SellingPrice']) || is_blank($product['Stocks']) || is_blank($product['Re-Order']) ){
       $errors[] = 'Please complete all fields';
     }
 
@@ -356,15 +358,16 @@
     }
 
     $sql = "INSERT INTO products ";
-    $sql .= "(`ProductCode`,`ItemName`,`Description`,`Dimensions`,`CategoryId`,`Stocks`,`Re-Order`) ";
+    $sql .= "(`ProductCode`,`ItemName`,`Description`,`Dimensions`,`CategoryId`,`SellingPrice`,`Stocks`,`Re-Order`) ";
     $sql .= "VALUES (";
     $sql .= "'" . db_escape($db, $product['ProductCode']) . "',";
     $sql .= "'" . db_escape($db, $product['ItemName']) . "',";
     $sql .= "'" . db_escape($db, $product['Description']) . "',";
     $sql .= "'" . db_escape($db, $product['Dimensions']) . "',";
     $sql .= db_escape($db, $product['CategoryId']) . ",";
+    $sql .= db_escape($db, $product['SellingPrice']) . "',";
     $sql .= db_escape($db, $product['Stocks']) . ",";
-    $sql .=  db_escape($db, $product['Re-Order']);
+    $sql .= db_escape($db, $product['Re-Order']);
     $sql .= ")";
     $result = mysqli_query($db, $sql);
     // For INSERT statements, $result is true/false
@@ -391,6 +394,7 @@
     $sql .= "`Description`='" . db_escape($db, $product['Description']) . "', ";
     $sql .= "`Dimensions`='" . db_escape($db, $product['Dimensions']) . "', ";
     $sql .= "`CategoryId`=" . db_escape($db, $product['CategoryId']) . ", ";
+    $sql .= "`SellingPrice`=" . db_escape($db, $product['SellingPrice']) . ", ";
     $sql .= "`Stocks`=" . db_escape($db, $product['Stocks']) . ", ";
     $sql .= "`Re-Order`=" . db_escape($db, $product['Re-Order']) . " ";
     $sql .= "WHERE ProductCode='" . db_escape($db, $product['ProductCode']) . "' ";
@@ -485,9 +489,10 @@
     }
 
     $sql = "INSERT INTO stores ";
-    $sql .= "(Name, Address) ";
+    $sql .= "(Name,ContactNumber,Address) ";
     $sql .= "VALUES (";
     $sql .= "'" . db_escape($db, $store['Name']) . "',";
+    $sql .= "'" . "+63" . db_escape($db, $store['ContactNumber']) . "',";
     $sql .= "'" . db_escape($db, $store['Address']) . "'";
     $sql .= ")";
     $result = mysqli_query($db, $sql);
@@ -511,7 +516,8 @@
     }
     $sql = "UPDATE stores SET ";
     $sql .= "Name='" . db_escape($db, $store['Name']) . "', ";
-    $sql .= "Address='" . db_escape($db, $store['Address']) . "' ";  
+    $sql .= "Address='" . db_escape($db, $store['Address']) . "', ";
+    $sql .= "ContactNumber='" . "+63". db_escape($db, $store['ContactNumber']) . "' ";  
     $sql .= "WHERE Id='" . db_escape($db, $store['Id']) . "' ";
     $sql .= "LIMIT 1";
     $result = mysqli_query($db, $sql);
@@ -566,6 +572,16 @@
     $po = mysqli_fetch_assoc($result);
     mysqli_free_result($result);
     return $po; // returns an assoc. array
+  }
+  function find_po_fully_received($options=[]) {
+    global $db;
+
+    $sql = "SELECT * FROM purchase_orders ";
+    $sql .= "WHERE status= 'Fully Received' ";
+
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    return $result;
   }
 
    function find_products_by_po_id($id, $options=[]) {
@@ -623,12 +639,13 @@ function update_inventory_stocks($ProductCode,$quantity){
 
 }
 
-   function update_po_status($id, $message){
+   function update_po_status_received_on($id,$message,$date = ''){
     global $db;
 
 
     $sql = "UPDATE purchase_orders SET ";
-    $sql .= "status ='"  . db_escape($db, $message) . "' ";
+    $sql .= "status ='"  . db_escape($db, $message) . "', ";
+    $sql .= "received_on ='"  . db_escape($db, $date) . "' ";
     $sql .= "WHERE purchase_order_id='" . db_escape($db, $id) . "' ";
     $sql .= "LIMIT 1";
     $result = mysqli_query($db, $sql);
