@@ -365,7 +365,7 @@
     $sql .= "'" . db_escape($db, $product['Description']) . "',";
     $sql .= "'" . db_escape($db, $product['Dimensions']) . "',";
     $sql .= db_escape($db, $product['CategoryId']) . ",";
-    $sql .= db_escape($db, $product['SellingPrice']) . "',";
+    $sql .= db_escape($db, $product['SellingPrice']) . ",";
     $sql .= db_escape($db, $product['Stocks']) . ",";
     $sql .= db_escape($db, $product['Re-Order']);
     $sql .= ")";
@@ -573,11 +573,11 @@
     mysqli_free_result($result);
     return $po; // returns an assoc. array
   }
-  function find_po_fully_received($options=[]) {
+  function find_po_status_closed($options=[]) {
     global $db;
 
     $sql = "SELECT * FROM purchase_orders ";
-    $sql .= "WHERE status= 'Fully Received' ";
+    $sql .= "WHERE status= 'Closed' ";
 
     $result = mysqli_query($db, $sql);
     confirm_result_set($result);
@@ -659,11 +659,34 @@ function update_inventory_stocks($ProductCode,$quantity){
       db_disconnect($db);
       exit;
     }
-
   }
+  function update_po_status_on_close($id,$actual_po_total,$supplier_total,$date = ''){
+    global $db;
+
+
+    $sql = "UPDATE purchase_orders SET ";
+    $sql .= "status ='"  . db_escape($db, 'Closed') . "', ";
+    $sql .= "actual_po_total ='"  . db_escape($db, $actual_po_total) . "', ";
+    $sql .= "supplier_total ='"  . db_escape($db, $supplier_total) . "', ";
+    $sql .= "received_on ='"  . db_escape($db, $date) . "' ";
+    $sql .= "WHERE purchase_order_id='" . db_escape($db, $id) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+    // For UPDATE statements, $result is true/falses
+
+    if($result) {
+      return true;
+    } else {
+      // UPDATE failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
   function sums($id){
     global $db;
-    $sql = "SELECT SUM(quantity) as sumQty,SUM(received) as sumQtyReceived FROM po_products ";
+    $sql = "SELECT SUM(quantity) as sumQty,SUM(received) as sumQtyReceived, SUM(cost*received) as sumActualAmount FROM po_products ";
     $sql.= "WHERE po_id='" . db_escape($db, $id) . "' ";
 
      $result = mysqli_query($db, $sql);

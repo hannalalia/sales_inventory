@@ -46,7 +46,7 @@ if(isset($_POST['deleteStore'])) {
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-	        <button type="Submit" name="deleteStore" class="btn btn-primary">Delete Store</button>
+	        <button type="Submit" name="deleteStore" class="btn btn-info">Delete Store</button>
 	      </div>
 	      </form>
 	    </div>

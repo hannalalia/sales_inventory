@@ -33,14 +33,7 @@ $sql .= "'" . db_escape($db, $additional_cost) . "'";
 
 $sql .= ")";
 mysqli_query($db, $sql);
-   // For INSERT statements, $result is true/false
-   // if($result) {
-   //   return true;
-   // } else {
-   //   // INSERT failed
-   //   echo mysqli_error($db);
-   //   db_disconnect($db);
-   //   exit;}
+
 foreach ($items as $value) {
 	$product = explode('-',preg_replace('/\s+/','',$value["data"][0]));
 	$product_code = $product[0];
@@ -61,17 +54,6 @@ foreach ($items as $value) {
   $sql2 .= ")";
   $result2 = mysqli_query($db, $sql2);
 }
-    // For INSERT statements, $result is true/false
-    // if($result) {
-    //   return true;
-    // } else {
-    //   // INSERT failed
-    //   echo mysqli_error($db);
-    //   db_disconnect($db);
-    //   exit;
-    // }
-	
-
 
 echo $po_id;
  ?>

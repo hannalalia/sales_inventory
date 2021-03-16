@@ -101,7 +101,7 @@ if(isset($_POST['updateProduct'])) {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <input type="submit" name="updateProduct" class="btn btn-primary" value="Update Product">  
+        <input type="submit" name="updateProduct" class="btn btn-info" value="Update Product">  
       </div>
       </form>
     </div>

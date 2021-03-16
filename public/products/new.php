@@ -93,7 +93,7 @@ if(isset($_POST['addProduct'])) {
           </div>
           <div class="form-group">
             <label for="SellingPrice">Selling Price</label>
-            <input type="number" class="form-control" name="SellingPrice" value="" >
+            <input type="text" class="form-control" name="SellingPrice" value="" >
           </div>
          <!--  <div>
             <label for="Stores">Available in store:</label> <br>        
@@ -114,7 +114,7 @@ if(isset($_POST['addProduct'])) {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <input type="submit" name="addProduct" class="btn btn-primary" value="Add Product">  
+        <input type="submit" name="addProduct" class="btn btn-info" value="Add Product">  
       </div>
       </form>
     </div>

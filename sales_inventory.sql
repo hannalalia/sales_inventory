@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 14, 2021 at 04:30 PM
+-- Generation Time: Mar 16, 2021 at 02:29 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -63,7 +63,12 @@ CREATE TABLE `po_products` (
 --
 
 INSERT INTO `po_products` (`po_id`, `product_code`, `cost`, `quantity`, `amount`, `received`) VALUES
-('1680e6f200dc77a2939939ddef626981', 'asdfghjkla123', 123, 23, 2829, 23);
+('1680e6f200dc77a2939939ddef626981', 'asdfghjkla123', 123, 23, 2829, 23),
+('4872bbc90f92e430cbc8c23a3caaf7ad', 'asdfghjkl1234', 456, 789, 359784, 0),
+('4872bbc90f92e430cbc8c23a3caaf7ad', 'qwez123', 987, 5, 4935, 0),
+('758b162d793180244b355ab7e8ac0744', 'asdfghjkl1234', 123, 45, 5535, 45),
+('8fcc07805af0957a1864deb535d39f42', '12', 123, 12, 1476, 1),
+('8fcc07805af0957a1864deb535d39f42', 'asdfghjkl1234', 120, 10, 1200, 1);
 
 -- --------------------------------------------------------
 
@@ -87,8 +92,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`ProductCode`, `ItemName`, `Description`, `Dimensions`, `CategoryId`, `SellingPrice`, `Stocks`, `Re-Order`) VALUES
-('asdfghjkl1234', 'Banana', 'qwq', '10 x 10 x 1', 4, 12.25, 10, 10),
-('asdfghjkla123', 'Apples', 'qwqw', '12.5 x 3 x 5.7', 12, 12, 68, 24),
+('12', '123', 'asda', '12 x 121 x 12', 3, 12.3, 13, 20),
+('asdfghjkl1234', 'Banana', 'qwq', '10 x 10 x 1', 4, 12.25, 56, 10),
+('asdfghjkla123', 'Apples', 'qwqw', '12.5 x 3 x 5.7', 12, 12.4, 68, 24),
 ('qwez123', 'Grape', 'adsad', '2 x 2 x 2', 20, 23, 88, 15);
 
 -- --------------------------------------------------------
@@ -106,15 +112,20 @@ CREATE TABLE `purchase_orders` (
   `status` varchar(20) NOT NULL,
   `subtotal` float NOT NULL,
   `additional_cost` float DEFAULT NULL,
-  `received_on` varchar(10) DEFAULT NULL
+  `received_on` varchar(10) DEFAULT NULL,
+  `actual_po_total` float DEFAULT NULL,
+  `supplier_total` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `purchase_orders`
 --
 
-INSERT INTO `purchase_orders` (`purchase_order_id`, `supplier_id`, `store_id`, `order_date`, `delivery_date`, `status`, `subtotal`, `additional_cost`, `received_on`) VALUES
-('1680e6f200dc77a2939939ddef626981', 31, 7, '2021-03-18', '2021-03-19', 'Fully Received', 7869, 100, '2021-03-14');
+INSERT INTO `purchase_orders` (`purchase_order_id`, `supplier_id`, `store_id`, `order_date`, `delivery_date`, `status`, `subtotal`, `additional_cost`, `received_on`, `actual_po_total`, `supplier_total`) VALUES
+('1680e6f200dc77a2939939ddef626981', 31, 7, '2021-03-18', '2021-03-26', 'Closed', 7869, 100, '2021-03-15', 2929, 2929),
+('4872bbc90f92e430cbc8c23a3caaf7ad', 24, 7, '2021-03-16', '2021-03-01', 'Pending', 364719, 2456, '', NULL, NULL),
+('758b162d793180244b355ab7e8ac0744', 24, 7, '2021-03-16', '2021-03-15', 'Fully Received', 5535, 1200, '2021-03-15', NULL, NULL),
+('8fcc07805af0957a1864deb535d39f42', 24, 9, '2021-03-20', '2021-03-20', 'Closed', 2676, 123, '2021-03-15', 366, 366);
 
 -- --------------------------------------------------------
 
