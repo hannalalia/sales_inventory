@@ -1,16 +1,5 @@
 <?php require_once('../../private/initialize.php');?>
 <?php
-//$supplier_list= find_all_suppliers();
-
-
-//if(!isset($_POST['searchBtn']) && empty($_POST['categorySearch'])){
-    //$category_list = find_all_categories();
-// }else{
-//     $category_list = find_all_categories($_POST['categorySearch']);
-// }
-
-// $category_name_list = find_all_category_name();
-// $store_list=find_all_stores();
 $po_list = find_all_po();
 
 ?>
@@ -19,39 +8,7 @@ $po_list = find_all_po();
 
   	<div class="container">
       	<h2 class="my-3 text-center">Purchase Orders</h2>
-      <!--  <form method="post" class="col-sm-5 col-12 my-3">
-            <div class="form-group row">
-            <label for="status" class="col-sm-3 col-form-label">Status: </label>
-            <select name="status" id="" class="form-control col-sm-6">
-                <option value="All">All</option>
-                <option value="">Pending</option>
-                <option value="">Partially Received</option>
-                <option value="">Fully Received</option>
-            </select>
-            </div>
-            <div class="form-group row">
-            <label for="supplier" class="col-sm-3 col-form-label">Supplier: </label>
-            <select name="supplier" id="" class="form-control col-sm-6">
-                <option value="All">All</option>
-                <?php// if (mysqli_num_rows($supplier_list)>0){
-                     //while($supplier= mysqli_fetch_assoc($supplier_list)) { ?>
-                        <option ><?php //echo h($supplier['CompanyName']);?></option>
-                <?php //}}?>
-            </select>
-            </div>
-             <div class="form-group row">
-            <label for="store" class="col-sm-3 col-form-label">Stores: </label>
-            <select name="store" id="" class="form-control col-sm-6">
-                <option value="All">All</option>
-                <?php //if (mysqli_num_rows($store_list)>0){
-                     //while($store= mysqli_fetch_assoc($store_list)) { ?>
-                        <option value="<?php //echo h($store['Id']); ?>"><?php //echo h($store['Name']);?></option>
-                <?php //}}?>
-            </select>
-            </div>
-        </form> -->
-
-    <table class="mx-auto table table-sm table-hover table-responsive-md text-center" id="po_table">
+    <table class="mx-auto table table-sm table-hover table-responsive-lg text-center" id="po_table">
     	<thead class="thead-light">
     		<tr>
     			<th>Purchase Order #</th>
@@ -59,7 +16,7 @@ $po_list = find_all_po();
 	    		<th>Supplier</th>
 	    		<th>Store</th>
 	    		<th>Status</th>
-                <th>Expected On</th>
+                <th>Due Date</th>
                 <th>Total Cost</th>
                 <th>View/Receive</th>
     		</tr>
@@ -92,8 +49,8 @@ $po_list = find_all_po();
     		<?php }?>
     	</tbody>
     </table>
-    <a class="btn btn-primary text-light m-2" href="<?php echo url_for('purchase_orders/new.php')?>" >Create Purchase Order</a>
-    <a class="btn btn-primary text-light m-2" href="<?php echo url_for('purchase_orders/invoice.php')?>" >View Invoices</a>
+    <a class="btn btn-info text-light m-2" href="<?php echo url_for('purchase_orders/new.php')?>" >Create Purchase Order</a>
+    <a class="btn btn-info text-light m-2" href="<?php echo url_for('purchase_orders/po_recon.php')?>" >P.O. Recon</a>
     </div>
 <?php require('../../private/shared/public_footer.php');?>
 <script type="text/javascript" src="<?php echo url_for('resources/js/populate_category.js')?>"></script>
@@ -110,4 +67,29 @@ $(document).ready( function () {
         }]
     });
 } );
+</script>
+<script>
+    let d = new Date();
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    let year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    let formattedDate = [year, month, day].join('/');
+    let today = new Date(formattedDate);
+    console.log(formattedDate);
+    $('#po_table tr').each(function() {
+    let due_date = $('td:nth-child(6)', this).text();
+    let status = $('td:nth-child(5)', this).text();
+    let due_date_arr = due_date.split("-");
+    let date = new Date(due_date_arr[1]+'/'+due_date_arr[2] +'/'+due_date_arr[0]);
+    console.log(date);
+        if(today >=date && (status == 'Pending' || status == 'Fully Received' || status == 'Partially Received')){
+            $(this).addClass("table-danger")
+        }
+    });
 </script>

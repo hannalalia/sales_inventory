@@ -55,7 +55,7 @@ if(isset($_POST['addStore'])) {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <input type="submit" name="addStore" class="btn btn-primary" value="Add Store">  
+        <input type="submit" name="addStore" class="btn btn-info" value="Add Store">  
       </div>
       </form>
     </div>

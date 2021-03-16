@@ -68,7 +68,7 @@ $product_list = find_products_by_po_id($id);
 				if(mysqli_num_rows($product_list)>0){
 					$subtotal = 0;
 				 	while($products=mysqli_fetch_assoc($product_list)){
-				 		$subtotal += $products['amount'];
+				 		// $subtotal += $products['cost'] * $products['received'];
 				 		?>
 				 <tr>
 				 	<td><?php echo $products['product_code'];?></td>
@@ -76,8 +76,8 @@ $product_list = find_products_by_po_id($id);
                  echo $item['ItemName'];?></td>
                  	<td><?php echo $item['Description'];?></td>
 				 	<td><?php echo $products['cost'];?></td>
-				 	<td><?php echo $products['quantity'];?></td>
-				 	<td><?php echo $products['amount'];?></td>
+				 	<td><?php echo $products['received'];?></td>
+				 	<td><?php echo $products['cost'] * $products['received'];?></td>
 				 </tr>
 
 				<?php }} ?>
@@ -86,15 +86,15 @@ $product_list = find_products_by_po_id($id);
 		<table class="my-5 table table-sm table-bordered w-25">
 			<tr>
 				<td>Subtotal: </td>
-				<td class="text-center"><?php echo $subtotal;?></td>
+				<td class="text-center"><?php echo $po['actual_po_total'] - $po['additional_cost']?></td>
 			</tr>
 			<tr>
 				<td>Additional Cost: </td>
-				<td class="text-center"><?php echo $po['additional_cost'];?></td>
+				<td class="text-center"><?php echo $po['additional_cost'] + ($po['supplier_total']-$po['actual_po_total']);?></td>
 			</tr>
 			<tr>
 				<td>Total: </td>
-				<td class="text-center"><?php echo $subtotal + $po['additional_cost'];?></td>
+				<td class="text-center"><?php echo $po['supplier_total'];?></td>
 			</tr>
 		</table>
 		<div style="" class="d-flex justify-content-between">
@@ -105,8 +105,8 @@ $product_list = find_products_by_po_id($id);
 		</div>
 		
 	</div>
-    <a class="btn btn-primary text-light m-2" href="<?php echo url_for('purchase_orders/invoice.php')?>" >Back</a>
-    <button id="printInvoiceBtn" class="btn btn-primary">Print</button>
+    <a class="btn btn-info text-light m-2" href="<?php echo url_for('purchase_orders/po_recon.php')?>" >Back</a>
+    <button id="printInvoiceBtn" class="btn btn-info">Print</button>
 </div>
 <?php require('../../private/shared/public_footer.php');?>
 <script>

@@ -45,7 +45,7 @@ if(isset($_POST['updateCategory'])) {
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-	        <input type="submit" class="btn btn-primary" name="updateCategory" id="updateBtn" value="Update Category">
+	        <input type="submit" class="btn btn-info" name="updateCategory" id="updateBtn" value="Update Category">
 	      </div>
 	      </form>
 	    </div>
