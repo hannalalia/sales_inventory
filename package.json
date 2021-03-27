@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "bootstrap": "^4.6.0",
+    "datatables.net-dt": "^1.10.24",
+    "datatables.net-jqui": "^1.10.24",
+    "feather-icons": "^4.28.0"
+  }
+}

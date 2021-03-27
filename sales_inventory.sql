@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 14, 2021 at 04:30 PM
+-- Generation Time: Mar 26, 2021 at 02:55 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -46,6 +46,34 @@ INSERT INTO `categories` (`Id`, `CategoryName`, `Description`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `po_history`
+--
+
+CREATE TABLE `po_history` (
+  `purchase_order_id` varchar(32) NOT NULL,
+  `supplier_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL,
+  `order_date` varchar(10) NOT NULL,
+  `delivery_date` varchar(10) NOT NULL,
+  `status` varchar(20) NOT NULL,
+  `subtotal` float NOT NULL,
+  `additional_cost` float DEFAULT NULL,
+  `received_on` varchar(10) DEFAULT NULL,
+  `actual_po_total` float DEFAULT NULL,
+  `supplier_total` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `po_history`
+--
+
+INSERT INTO `po_history` (`purchase_order_id`, `supplier_id`, `store_id`, `order_date`, `delivery_date`, `status`, `subtotal`, `additional_cost`, `received_on`, `actual_po_total`, `supplier_total`) VALUES
+('758b162d793180244b355ab7e8ac0744', 24, 7, '2021-03-16', '2021-03-15', 'Closed', 5535, 1200, '2021-03-25', 6735, 6737),
+('4872bbc90f92e430cbc8c23a3caaf7ad', 24, 7, '2021-03-16', '2021-03-01', 'Closed', 364719, 2456, '2021-03-25', 2456, 2456);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `po_products`
 --
 
@@ -57,13 +85,6 @@ CREATE TABLE `po_products` (
   `amount` float NOT NULL,
   `received` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `po_products`
---
-
-INSERT INTO `po_products` (`po_id`, `product_code`, `cost`, `quantity`, `amount`, `received`) VALUES
-('1680e6f200dc77a2939939ddef626981', 'asdfghjkla123', 123, 23, 2829, 23);
 
 -- --------------------------------------------------------
 
@@ -87,8 +108,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`ProductCode`, `ItemName`, `Description`, `Dimensions`, `CategoryId`, `SellingPrice`, `Stocks`, `Re-Order`) VALUES
-('asdfghjkl1234', 'Banana', 'qwq', '10 x 10 x 1', 4, 12.25, 10, 10),
-('asdfghjkla123', 'Apples', 'qwqw', '12.5 x 3 x 5.7', 12, 12, 68, 24),
+('12', '123', 'asda', '12 x 121 x 12', 20, 12.56, 25, 20),
+('asdfghjkl1234', 'Banana', 'qwq', '10 x 10 x 1', 4, 12.25, 11, 10),
+('asdfghjkla123', 'Apples', 'qwqw', '12.5 x 3 x 5.7', 12, 12.4, 53, 24),
 ('qwez123', 'Grape', 'adsad', '2 x 2 x 2', 20, 23, 88, 15);
 
 -- --------------------------------------------------------
@@ -106,15 +128,34 @@ CREATE TABLE `purchase_orders` (
   `status` varchar(20) NOT NULL,
   `subtotal` float NOT NULL,
   `additional_cost` float DEFAULT NULL,
-  `received_on` varchar(10) DEFAULT NULL
+  `received_on` varchar(10) DEFAULT NULL,
+  `actual_po_total` float DEFAULT NULL,
+  `supplier_total` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock_adjustments`
+--
+
+CREATE TABLE `stock_adjustments` (
+  `Ref_Id` varchar(32) NOT NULL,
+  `ProductCode` varchar(32) NOT NULL,
+  `Reason` varchar(255) NOT NULL,
+  `StockCount` int(11) NOT NULL,
+  `Date` datetime NOT NULL DEFAULT current_timestamp(),
+  `EmployeeName` varchar(255) DEFAULT NULL,
+  `Status` varchar(8) NOT NULL,
+  `StockAfter` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `purchase_orders`
+-- Dumping data for table `stock_adjustments`
 --
 
-INSERT INTO `purchase_orders` (`purchase_order_id`, `supplier_id`, `store_id`, `order_date`, `delivery_date`, `status`, `subtotal`, `additional_cost`, `received_on`) VALUES
-('1680e6f200dc77a2939939ddef626981', 31, 7, '2021-03-18', '2021-03-19', 'Fully Received', 7869, 100, '2021-03-14');
+INSERT INTO `stock_adjustments` (`Ref_Id`, `ProductCode`, `Reason`, `StockCount`, `Date`, `EmployeeName`, `Status`, `StockAfter`) VALUES
+('c8cfcabcd7c8af83c3a83652ce146c71', 'asdfghjkla123', 'Defective', -15, '2021-03-26 01:45:54', NULL, '', 53);
 
 -- --------------------------------------------------------
 
@@ -135,7 +176,6 @@ CREATE TABLE `stores` (
 
 INSERT INTO `stores` (`Id`, `Name`, `Address`, `ContactNumber`) VALUES
 (7, 'Store 4', 'qweqw', '+630987654321'),
-(8, 'Store 1', '', '+63'),
 (9, 'asda', '', '+63');
 
 -- --------------------------------------------------------
@@ -168,8 +208,7 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`Id`, `CompanyName`, `Address`, `ContactNumber`, `Email`) VALUES
-(24, 'qwqewe', '                        asdas', '+639497365041', 'asdasd@asdasdasd.com'),
-(31, 'helloworld', '            asdas', '+639497365041', 'asdasd@sdfsdf.com');
+(24, 'qwqewe', '                        asdas', '+639497365041', 'asdasd@asdasdasd.com');
 
 --
 -- Indexes for dumped tables
@@ -236,13 +275,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `stores`
 --
 ALTER TABLE `stores`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- Constraints for dumped tables

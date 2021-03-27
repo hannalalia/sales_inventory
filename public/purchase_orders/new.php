@@ -4,10 +4,10 @@ $supplier_list= find_all_suppliers();
 $product_list = find_all_products();
 $store_list=find_all_stores();
 
-if(isset($_GET['ProductCode'])){
-  $items = $_GET['ProductCode'];
-  echo $items[0];
-}
+// if(isset($_GET['ProductCode'])){
+//   $items = $_GET['ProductCode'];
+//   echo $items[0];
+// }
 ?>
 <?php require('../../private/shared/public_header.php');?>
 <?php require('../../private/shared/public_navigation.php');?>
@@ -69,9 +69,9 @@ if(isset($_GET['ProductCode'])){
     <input type="number" id="cost" class="form-control col-sm-3" placeholder="Purchase cost">
     <input type="number" id="qty" class="form-control col-sm-3" placeholder="Quantity" >
   
-   <button id="addItem" class="btn btn-primary text-light">Add Item</button>  </div>
-    <input class="btn btn-primary text-light mb-3 mr-2" id="create" type="submit" value="Create">
-   <!--  <button id="addRow" class="btn btn-primary text-light mb-3">Add Row</button> -->
+   <button id="addItem" class="btn btn-info text-light">Add Item</button>  </div>
+    <input class="btn btn-info text-light mb-3 mr-2" id="create" type="submit" value="Create">
+   <!--  <button id="addRow" class="btn btn-info text-light mb-3">Add Row</button> -->
 
 
     <!-- Search Item End -->

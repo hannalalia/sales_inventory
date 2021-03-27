@@ -9,10 +9,10 @@ if(isset($_POST['addProduct'])) {
   $product['Description'] = $_POST['Description'] ?? '';
   $product['SellingPrice'] = $_POST['SellingPrice'] ?? '';
 
-  $length = $_POST['length'] ?? '';
-  $width= $_POST['width'] ?? '';
-  $height = $_POST['height'] ?? '';
-  $product['Dimensions'] = $length . " x " . $width . " x " . $height;
+  // $length = $_POST['length'] ?? '';
+  // $width= $_POST['width'] ?? '';
+  // $height = $_POST['height'] ?? '';
+  // $product['Dimensions'] = $length . " x " . $width . " x " . $height;
   $product['CategoryId'] = $_POST['Category'] ?? '';
   $product['Stocks'] = $_POST['Stocks'] ?? '';
   $product['Re-Order'] = $_POST['Re-Order'] ?? '';
@@ -60,10 +60,10 @@ if(isset($_POST['addProduct'])) {
             <label for="Description" >Description</label>
             <textarea  class="form-control" name="Description" id="" cols="10" rows="2" ></textarea> 
           </div> 
-          <div class="form-group">
+<!--           <div class="form-group">
             <label for="length">Length</label>
             <input type="number" class="form-control" name="length" min="0" >
-          </div>
+          </div> -->
           <!-- <div class="input-group">
             <input type="text" class="form-control" aria-label="Text input with dropdown button" name="length" placeholder="Length">
             <div class="input-group-append">
@@ -75,14 +75,14 @@ if(isset($_POST['addProduct'])) {
               </div>
             </div>
           </div> -->
-          <div class="form-group">
+<!--           <div class="form-group">
             <label for="width"> Width</label>
             <input type="number" class="form-control" name="width"  min="0">
           </div>
           <div class="form-group">
             <label for="height">Height</label>
             <input type="number" class="form-control" name="height"  min="0">
-          </div>
+          </div> -->
           <div class="form-group">
             <label for="Category">Category</label>
             <select name="Category" class="form-control">
@@ -91,9 +91,17 @@ if(isset($_POST['addProduct'])) {
             <?php }?>
             </select>            
           </div>
+            <div class="form-group">
+            <label for="Brand">Brand</label>
+            <select name="Brand" class="form-control">
+              <?php //while($category = mysqli_fetch_assoc($category_list)){ ?>
+              <option value="<?php //echo $category['Id'];?>"><?php //echo $category['CategoryName'];?></option>
+            <?php// }?>
+            </select>            
+          </div>
           <div class="form-group">
             <label for="SellingPrice">Selling Price</label>
-            <input type="number" class="form-control" name="SellingPrice" value="" >
+            <input type="text" class="form-control" name="SellingPrice" value="" >
           </div>
          <!--  <div>
             <label for="Stores">Available in store:</label> <br>        
@@ -104,7 +112,7 @@ if(isset($_POST['addProduct'])) {
 
           </div> -->
           <div class="form-group">
-            <label for="Stocks">Stocks On Hand</label>
+            <label for="Stocks">Initial Stocks</label>
             <input type="number" class="form-control" name="Stocks"  min="0">
           </div>    
           <div class="form-group">
@@ -114,7 +122,7 @@ if(isset($_POST['addProduct'])) {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <input type="submit" name="addProduct" class="btn btn-primary" value="Add Product">  
+        <input type="submit" name="addProduct" class="btn btn-info" value="Add Product">  
       </div>
       </form>
     </div>

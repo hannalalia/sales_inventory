@@ -1,14 +1,7 @@
 <?php require_once('../../private/initialize.php');?>
 <?php 
 
-//if(!isset($_POST['searchBtn']) && empty($_POST['supplierSearch'])){
-    $supplier_list = find_all_suppliers();
-// }else{
-//     $supplier_list = find_all_suppliers($_POST['supplierSearch']);
-// }
-
-// $company_name_list = find_all_company_name();
-
+$supplier_list = find_all_suppliers();
 
 ?>
 <?php include('../../private/shared/public_header.php');?>
@@ -20,24 +13,10 @@
 </style>
   <body>
   	<div class="container mb-3">
-<!--    <div class="row mx-1">    -->   
           <?php  echo display_session_errors(); ?>
           <?php echo display_session_message(); get_and_clear_session_errors();  ?>
         <h2 class="my-3 text-center" id="title">List of Suppliers</h2>
-      <!--   <form method="post" class="col-sm-5 col-12 my-3">
-            <div class="row">
-            <input class="form-control col-sm-9 col-10" type="search" name="supplierSearch" placeholder="Company Name" list="companies">
-            <datalist id="companies">
-            <?php //if (mysqli_num_rows($company_name_list)>0){
-            //while($company= mysqli_fetch_assoc($company_name_list)) { ?>
-                <option><?php //echo h($company['CompanyName']);?></option>
-            <?php// }}?>
-            </datalist>
-            <input class="btn btn-primary btn-sm col-sm-3 col-2" type="submit" name="searchBtn" value="Search">
-            </div>
-        </form> -->
-<!--     </div> -->
-    <table class="mx-auto table table-sm table-hover table-responsive-sm" id="printTable">
+    <table class="mx-auto table table-sm table-hover table-responsive-lg" id="printTable">
     	<thead class="thead-light">
     		<tr>
     			<th>#</th>
@@ -69,8 +48,8 @@
     		<?php }?>
     	</tbody>
     </table>
-    <a class="btn btn-primary text-light" data-toggle="modal" data-target="#newSupplierModal">New Supplier</a>
-    <button id="printBtn" class="btn btn-primary">Print</button>
+    <a class="btn btn-info text-light m-2" data-toggle="modal" data-target="#newSupplierModal">New Supplier</a>
+    <button id="printBtn" class="btn btn-info m-2">Print</button>
 
     <!-- New Supplier Modal -->	
     <?php include('new.php');?>
@@ -79,7 +58,6 @@
 	<!-- Delete Supplier Modal -->
 	<?php include('delete.php');?>	
     </div>
- </body>
 <?php  get_and_clear_session_message()?>
 <?php include('../../private/shared/public_footer.php');?>
 <script type="text/javascript" src="<?php echo url_for('resources/js/populate_supplier.js')?>"></script>
@@ -87,13 +65,15 @@
 </script>
 <script >
 $(document).ready( function () {
-    $('#printTable').DataTable({
-        "order": [1,"asc"],
-        "columnDefs": [{
-            "targets": [0,2,3,4,5,6],
-             "orderable":false
-        }]
-
-    });
-} );
+    let row = $('#printTable tr').length;
+    if(row>0){
+        $('#printTable').DataTable({
+            "order": [1,"asc"],
+            "columnDefs": [{
+                "targets": [2,3,4,5,6],
+                 "orderable":false
+            }]
+        });
+    }
+});
 </script>

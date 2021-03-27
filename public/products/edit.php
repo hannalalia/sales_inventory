@@ -6,10 +6,11 @@ if(isset($_POST['updateProduct'])) {
   $product['ProductCode'] = $_POST['ProductCode'];
   $product['ItemName'] = $_POST['ItemName'] ?? '';
   $product['Description'] = $_POST['Description'] ?? '';
-  $length = $_POST['length'] ?? '';
-  $width= $_POST['width'] ?? '';
-  $height = $_POST['height'] ?? '';
-  $product['Dimensions'] = $length . " x " . $width . " x " . $height;
+  // $length = $_POST['length'] ?? '';
+  // $width= $_POST['width'] ?? '';
+  // $height = $_POST['height'] ?? '';
+  // $product['Dimensions'] = $length . " x " . $width . " x " . $height;
+  $product['BrandId'] = $_POST['BrandId'] ?? '';
   $product['CategoryId'] = $_POST['CategoryId'] ?? '';
   $product['SellingPrice'] = $_POST['SellingPrice'] ?? '';
   $product['Stocks'] = $_POST['Stocks'] ?? '';
@@ -55,11 +56,11 @@ if(isset($_POST['updateProduct'])) {
             <label for="Description" >Description</label>
             <textarea  class="form-control" name="Description" cols="10" rows="2" id="Description"></textarea> 
           </div> 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="length">Length</label>
             <input type="text" class="form-control" name="length" id="Length"  min="0">
           </div>
-          <!-- <div class="input-group">
+          <div class="input-group">
             <input type="text" class="form-control" aria-label="Text input with dropdown button" name="length" placeholder="Length">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Unit</button>
@@ -69,7 +70,7 @@ if(isset($_POST['updateProduct'])) {
                 <a class="dropdown-item" href="#">meter</a>
               </div>
             </div>
-          </div> -->
+          </div>
           <div class="form-group">
             <label for="width"> Width</label>
             <input type="text" class="form-control" name="width" id="Width"  min="0">
@@ -77,13 +78,21 @@ if(isset($_POST['updateProduct'])) {
           <div class="form-group">
             <label for="height">Height</label>
             <input type="text" class="form-control" name="height" id="Height"  min="0">
-          </div>
+          </div> -->
           <div class="form-group">
             <label for="CategoryId">Category</label>
             <select name="CategoryId" class="form-control" id="Category">
               <?php while($category = mysqli_fetch_assoc($category_list)){ ?>
               <option value="<?php echo $category['Id'];?>"><?php echo $category['CategoryName'];?></option>
             <?php }?>
+            </select>           
+          </div>
+          <div class="form-group">
+            <label for="BrandId">Brand</label>
+            <select name="BrandId" class="form-control" id="Brand">
+              <?php //while($category = mysqli_fetch_assoc($category_list)){ ?>
+              <option value="<?php// echo $category['Id'];?>"><?php //echo $category['CategoryName'];?></option>
+            <?php// }?>
             </select>           
           </div>
           <div class="form-group">
@@ -101,7 +110,7 @@ if(isset($_POST['updateProduct'])) {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <input type="submit" name="updateProduct" class="btn btn-primary" value="Update Product">  
+        <input type="submit" name="updateProduct" class="btn btn-info" value="Update Product">  
       </div>
       </form>
     </div>
