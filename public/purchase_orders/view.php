@@ -4,18 +4,25 @@
  $po = find_po_by_id($id);
  $product_list = find_products_by_po_id($id);
  $qty_sum_arr = sums($id);
+ $date_received =date('Y-m-d');
 
 
-if($qty_sum_arr['sumQtyReceived']>0 && $qty_sum_arr['sumQtyReceived'] == $qty_sum_arr['sumQty']){
-  $date_received =date('Y-m-d');
-  update_po_status_received_on($id,'Fully Received',$date_received);
-}elseif($qty_sum_arr['sumQtyReceived']>0 && $qty_sum_arr['sumQtyReceived'] != $qty_sum_arr['sumQty']){
-  update_po_status_received_on($id,'Partially Received');
-}else{
-  update_po_status_received_on($id,'Pending');
+
+if(isset($_POST['closePo'])){
+  $actualPoTotal = $qty_sum_arr['sumActualAmount'] + $po['additional_cost'];
+  $supplierTotal = $_POST['supplierTotal'] ?? '';
+  update_po_status_on_close($id,$actualPoTotal,$supplierTotal,$date_received);
+}
+if($po['status']!=='Closed' && !isset($_POST['closePo'])){
+  if($qty_sum_arr['sumQtyReceived']>0 && $qty_sum_arr['sumQtyReceived'] == $qty_sum_arr['sumQty']){
+    update_po_status_received_on($id,'Fully Received',$date_received);
+  }elseif($qty_sum_arr['sumQtyReceived']>0 && $qty_sum_arr['sumQtyReceived'] != $qty_sum_arr['sumQty']) {
+    update_po_status_received_on($id,'Partially Received');
+  }else{
+    update_po_status_received_on($id,'Pending');
+  }
 }
 
-//TODO update stocks in inventory when received
 if(isset($_POST['received'])) {
   $product = [];
   $product['product_code'] = $_POST['pcode'] ?? '';
@@ -52,7 +59,10 @@ if(isset($_POST['received'])) {
   	<p>Purchase Order #: <?php echo $po['purchase_order_id']?></p>
   </div>
   <div>
-  	<p>Date: <?php echo $po['order_date']?></p>
+  	<p>Order Date: <?php echo $po['order_date']?></p>
+  </div>
+   <div>
+    <p>Due Date: <?php echo $po['delivery_date']?></p>
   </div>
   <div>
   	<p>Supplier: <?php $supplier = find_supplier_by_id($po['supplier_id']);
@@ -64,10 +74,10 @@ if(isset($_POST['received'])) {
   	<p>Store: <?php  $store = find_store_by_id($po['store_id']);
                      echo $store['Name'];?></p>
   </div>
-<!--   <div>
-  	<p>Status: <?php// echo $po['status']?></p>
+    <div>
+    <p>Additional Costs: <?php echo $po['additional_cost'];?></p>
   </div>
- -->
+
  <table class="mx-auto table table-sm table-hover table-responsive-md">
     <thead class="thead-light">
         <tr>
@@ -93,13 +103,17 @@ if(isset($_POST['received'])) {
         <td><?php echo h($product['cost']); ?></td>
         <td class="dbQty"><?php echo h($product['quantity']); ?></td>
         <td><?php echo h($product['amount']); ?></td>
-        <td class="dbQtyReceived"><?php echo h($product['received']); ?></td>
-    		<td><button class="btn btn-sm btn-primary receiveBtn" data-product="<?php echo  $product['product_code'] .",". $product['cost'].",". $product['quantity'].",". $product['amount'] . "," . $product['received'];?>">Receive</button></td>
+        <td class="dbQtyReceived"><?php echo h($product['received']); ?></td>     
+    		<td><?php if($po['status'] !== 'Closed'){  ?><button class="btn btn-sm btn-info receiveBtn" data-product="<?php echo  $product['product_code'] .",". $product['cost'].",". $product['quantity'].",". $product['amount'] . "," . $product['received'];?>">Receive</button><?php }?></td>
+        
     	</tr>
     <?php }}?>
     </tbody>
   </table>
-  
+  <?php if($po['status'] !== 'Closed'){  ?>
+  <button class="btn btn-info mb-3" id="closePoBtn">Close Purchase Order</button>
+  <?php }?>
+<!-- Receiving Item Modal-->
 <div class="modal fade" id="receiveItem">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
@@ -120,11 +134,40 @@ if(isset($_POST['received'])) {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <input type="submit" name="received" class="btn btn-primary" value="Update">  
+        <input type="submit" name="received" class="btn btn-info" value="Update">  
       </div>
       </form>
     </div>
-
+  </div>
+</div>
+<!-- Closing Purchase order modal -->
+<div class="modal fade" id="closePoModal">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Close Purchase Order<span id="name"></span></h5>
+        <button type="button" class="close" data-dismiss="modal">
+          <span >&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+           <dl>
+             <dt class="h6">Purchase Order Total (Received): </dt>
+             <dd id="actualPoTotal"><?php echo  $qty_sum_arr['sumActualAmount'] + $po['additional_cost']?></dd>
+           </dl>
+          <div class="form-group">
+            <label class="h6"for="supplierTotal">Supplier Invoice Total: </label>
+            <input type="text" class="form-control" name="supplierTotal">
+          </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <input type="submit" name="closePo" class="btn btn-info" value="Update" id="closePo">  
+      </div>
+      </form>
+    </div>
+</div>
 </div>
 <?php  get_and_clear_session_message();?>
 <?php require('../../private/shared/public_footer.php');?>
@@ -152,11 +195,14 @@ if(isset($_POST['received'])) {
             $('#Quantity').attr('min' , 0);
             $('#Quantity').attr('max', maxQty);
             $('#Quantity').attr('value', 0);
-            console.log(product)
+        })
+        $("#closePoBtn").on('click',function () {
+            $("#closePoModal").modal('show');
         })
 
         $('#Quantity').on('change',function(){
           $('#receivedQty').text($(this).val())
+
         })
         
     });

@@ -40,13 +40,17 @@ if(isset($_POST['deleteProduct'])) {
 	        		<b>Description:</b>
 	        		<p class="d-inline" id="DescriptionDel"></p>  
 	        	</div>
-	        	<div class="mb-3">
+	        	<!-- <div class="mb-3">
 	        		<b>Dimensions:</b> 
 	        		<p class="d-inline" id="DimensionsDel"></p>
-	        	</div>
+	        	</div> -->
 	        	<div class="mb-3">
 	        		<b>Category:</b>
 	        		<p class="d-inline" id="CategoryDel"></p> 
+	        	</div> 
+	        	<div class="mb-3">
+	        		<b>Brand:</b>
+	        		<p class="d-inline" id="BrandDel"></p> 
 	        	</div> 
 	        	<div class="mb-3">
 	        		<b>Selling Price:</b>
@@ -59,7 +63,7 @@ if(isset($_POST['deleteProduct'])) {
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-	        <button type="Submit" name="deleteProduct" class="btn btn-primary">Delete Product</button>
+	        <button type="Submit" name="deleteProduct" class="btn btn-info">Delete Product</button>
 	      </div>
 	      </form>
 	    </div>
