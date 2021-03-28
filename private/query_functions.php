@@ -123,22 +123,36 @@
     }
 
   }
-
+   function foreign_key_supplier($id){
+    global $db;
+    $sql = "SELECT * FROM purchase_orders ";
+    $sql .= "WHERE supplier_id='" . db_escape($db, $id) . "' ";
+    // $sql .= "AND status <> 'Closed'";
+    $result = mysqli_query($db, $sql);
+    return $result;
+   }
    function delete_supplier($id) {
     global $db;
-
-    $sql = "DELETE FROM suppliers ";
-    $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
-    $sql .= "LIMIT 1";
-    $result = mysqli_query($db, $sql);
-    // For DELETE statements, $result is true/false
-    if($result) {
-      return true;
-    } else {
-      // DELETE failed
-      echo mysqli_error($db);
-      db_disconnect($db);
-      exit;
+    $foreign_key = foreign_key_supplier($id);
+    $row = mysqli_num_rows($foreign_key);
+    if($row===0){
+      $sql = "DELETE FROM suppliers ";
+      $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
+      $sql .= "LIMIT 1";
+      $result = mysqli_query($db, $sql);
+      // For DELETE statements, $result is true/false
+      if($result) {
+        return true;
+      } else {
+        // DELETE failed
+        echo mysqli_error($db);
+        db_disconnect($db);
+        exit;
+      }
+    }
+    else{
+      $_SESSION['errors'] = 'Cannot delete supplier. An unclosed purchase order exist with this supplier';
+      return  redirect_to(url_for('/suppliers/index.php'));
     }
   }
 
@@ -157,16 +171,15 @@
     return $result;
   }
 
-   function find_all_category_name($options=[]) {
-    global $db;
+  //  function find_all_category_name($options=[]) {
+  //   global $db;
 
-    $sql = "SELECT CategoryName FROM categories ";
-    $sql .= "ORDER BY Id ASC";
-    //echo $sql;
-    $result = mysqli_query($db, $sql);
-    confirm_result_set($result);
-    return $result;
-  }
+  //   $sql = "SELECT CategoryName FROM categories ";
+  //   $sql .= "ORDER BY Id ASC";
+  //   $result = mysqli_query($db, $sql);
+  //   confirm_result_set($result);
+  //   return $result;
+  // }
 
 
   function find_category_by_id($id, $options=[]) {
@@ -181,33 +194,19 @@
     mysqli_free_result($result);
     return $category; // returns an assoc. array
   }
-  function find_category_by_name($name, $options=[]) {
-    global $db;
-
-    $sql = "SELECT * FROM categories ";
-    $sql .= "WHERE CategoryName='" . db_escape($db, $name) . "' ";
-
-    $result = mysqli_query($db, $sql);
-    confirm_result_set($result);
-    $category = mysqli_fetch_assoc($result);
-    mysqli_free_result($result);
-    return $category; // returns an assoc. array
-  }
-
-  //  function find_category_name_by_id($id, $options=[]) {
+  // function find_category_by_name($name, $options=[]) {
   //   global $db;
 
-  //   $sql = "SELECT CategoryName FROM categories ";
-  //   $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
+  //   $sql = "SELECT * FROM categories ";
+  //   $sql .= "WHERE CategoryName='" . db_escape($db, $name) . "' ";
 
   //   $result = mysqli_query($db, $sql);
   //   confirm_result_set($result);
-  //   $category_name = mysqli_fetch_assoc($result);
+  //   $category = mysqli_fetch_assoc($result);
   //   mysqli_free_result($result);
-
-  //   return $category_name; // returns an assoc. array
+  //   return $category; // returns an assoc. array
   // }
-  
+
 
   function validate_category($category) {
     $errors = [];
@@ -319,16 +318,16 @@
     mysqli_free_result($result);
     return $product; // returns an assoc. array
   }
-  function find_all_item_name($options=[]) {
-    global $db;
+  // function find_all_item_name($options=[]) {
+  //   global $db;
 
-    $sql = "SELECT ItemName FROM products ";
-    $sql .= "ORDER BY ItemName ASC";
+  //   $sql = "SELECT ItemName FROM products ";
+  //   $sql .= "ORDER BY ItemName ASC";
 
-    $result = mysqli_query($db, $sql);
-    confirm_result_set($result);
-    return $result;
-  }
+  //   $result = mysqli_query($db, $sql);
+  //   confirm_result_set($result);
+  //   return $result;
+  // }
 
   function find_all_critical($options=[]) {
     global $db;
@@ -342,8 +341,28 @@
  function validate_product($product) {
     $errors = [];
 
-    if(is_blank($product['ProductCode']) ||is_blank($product['ItemName']) || is_blank($product['CategoryId']) || is_blank($product['SellingPrice']) || is_blank($product['Stocks']) || is_blank($product['Re-Order']) ){
+    if(is_blank($product['ProductCode']) ||is_blank($product['ItemName']) || is_blank($product['SellingPrice']) || is_blank($product['Stocks']) || is_blank($product['Re-Order']) ){
       $errors[] = 'Please complete all fields';
+    }
+    else if(is_blank($product['CategoryId'])){
+      $errors[] = 'Please select a category.';
+    }
+    else if(is_blank($product['BrandId'])){
+      $errors[] = 'Please select a brand.';
+    }
+    return $errors;
+  }
+   function validate_product_update($product) {
+    $errors = [];
+
+    if(is_blank($product['ProductCode']) ||is_blank($product['ItemName']) || is_blank($product['SellingPrice']) || is_blank($product['Re-Order']) ){
+      $errors[] = 'Please complete all fields';
+    }
+    else if(is_blank($product['CategoryId'])){
+      $errors[] = 'Please select a category.';
+    }
+    else if(is_blank($product['BrandId'])){
+      $errors[] = 'Please select a brand.';
     }
 
     return $errors;
@@ -358,14 +377,17 @@
     }
 
     $sql = "INSERT INTO products ";
-    $sql .= "(`ProductCode`,`ItemName`,`Description`,`Dimensions`,`CategoryId`,`SellingPrice`,`Stocks`,`Re-Order`) ";
+    // $sql .= "(`ProductCode`,`ItemName`,`Description`,`Dimensions`,`CategoryId`,`SellingPrice`,`Stocks`,`Re-Order`) ";
+    $sql .= "(`ProductCode`,`ItemName`,`Description`,`CategoryId`,`BrandId`,`SellingPrice`,`Stocks`,`Re-Order`) ";
+
     $sql .= "VALUES (";
     $sql .= "'" . db_escape($db, $product['ProductCode']) . "',";
     $sql .= "'" . db_escape($db, $product['ItemName']) . "',";
     $sql .= "'" . db_escape($db, $product['Description']) . "',";
-    $sql .= "'" . db_escape($db, $product['Dimensions']) . "',";
+    // $sql .= "'" . db_escape($db, $product['Dimensions']) . "',";
     $sql .= db_escape($db, $product['CategoryId']) . ",";
-    $sql .= db_escape($db, $product['SellingPrice']) . "',";
+    $sql .= db_escape($db, $product['BrandId']) . ",";
+    $sql .= db_escape($db, $product['SellingPrice']) . ",";
     $sql .= db_escape($db, $product['Stocks']) . ",";
     $sql .= db_escape($db, $product['Re-Order']);
     $sql .= ")";
@@ -384,18 +406,20 @@
    function update_product($product) {
     global $db;
 
-    $errors = validate_product($product);
+    $errors = validate_product_update($product);
     if(!empty($errors)) {
       return $errors;
     }
 
-    $sql = "UPDATE products SET ";
+    $sql = "UPDATE products SET ";  
+    // $sql .= "`ProductCode`='" . db_escape($db, $product['ProductCode']) . "', ";
     $sql .= "`ItemName`='" . db_escape($db, $product['ItemName']) . "', ";
     $sql .= "`Description`='" . db_escape($db, $product['Description']) . "', ";
-    $sql .= "`Dimensions`='" . db_escape($db, $product['Dimensions']) . "', ";
+    // $sql .= "`Dimensions`='" . db_escape($db, $product['Dimensions']) . "', ";
     $sql .= "`CategoryId`=" . db_escape($db, $product['CategoryId']) . ", ";
+    $sql .= "`BrandId`=" . db_escape($db, $product['BrandId']) . ", ";
     $sql .= "`SellingPrice`=" . db_escape($db, $product['SellingPrice']) . ", ";
-    $sql .= "`Stocks`=" . db_escape($db, $product['Stocks']) . ", ";
+    // $sql .= "`Stocks`=" . db_escape($db, $product['Stocks']) . ", ";
     $sql .= "`Re-Order`=" . db_escape($db, $product['Re-Order']) . " ";
     $sql .= "WHERE ProductCode='" . db_escape($db, $product['ProductCode']) . "' ";
     $sql .= "LIMIT 1";
@@ -461,15 +485,15 @@
     return $store; // returns an assoc. array
   }
   
-  function find_all_store_name($options=[]) {
-    global $db;
+  // function find_all_store_name($options=[]) {
+  //   global $db;
 
-    $sql = "SELECT Name FROM stores ";
-    $sql .= "ORDER BY Id ASC";
-    $result = mysqli_query($db, $sql);
-    confirm_result_set($result);
-    return $result;
-  }
+  //   $sql = "SELECT Name FROM stores ";
+  //   $sql .= "ORDER BY Id ASC";
+  //   $result = mysqli_query($db, $sql);
+  //   confirm_result_set($result);
+  //   return $result;
+  // }
 
 
  function validate_store($store) {
@@ -532,22 +556,38 @@
     }
 
   }
+  function foreign_key_store($id){
+    global $db;
+    $sql = "SELECT * FROM purchase_orders ";
+    $sql .= "WHERE store_id='" . db_escape($db, $id) . "' ";
+    // $sql .= "AND status!='" . db_escape($db, 'Closed') . "' ";
+
+    $result = mysqli_query($db, $sql);
+    return $result;
+   }
 
    function delete_store($id) {
     global $db;
-
-    $sql = "DELETE FROM stores ";
-    $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
-    $sql .= "LIMIT 1";
-    $result = mysqli_query($db, $sql);
-    // For DELETE statements, $result is true/false
-    if($result) {
-      return true;
-    } else {
-      // DELETE failed
-      echo mysqli_error($db);
-      db_disconnect($db);
-      exit;
+    $foreign_key= foreign_key_store($id);
+    $row = mysqli_num_rows($foreign_key);
+    if(!$row>0){
+      $sql = "DELETE FROM stores ";
+      $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
+      $sql .= "LIMIT 1";
+      $result = mysqli_query($db, $sql);
+      // For DELETE statements, $result is true/false
+      if($result) {
+        return true;
+      } else {
+        // DELETE failed
+        echo mysqli_error($db);
+        db_disconnect($db);
+        exit;
+      }
+    }
+    else{
+       $_SESSION['errors'] = 'Cannot delete store. An unclosed purchase order exist with this store.';
+       return  redirect_to(url_for('/stores/index.php'));
     }
   }
 
@@ -573,11 +613,11 @@
     mysqli_free_result($result);
     return $po; // returns an assoc. array
   }
-  function find_po_fully_received($options=[]) {
+  function find_po_status_closed($options=[]) {
     global $db;
 
     $sql = "SELECT * FROM purchase_orders ";
-    $sql .= "WHERE status= 'Fully Received' ";
+    $sql .= "WHERE status= 'Closed' ";
 
     $result = mysqli_query($db, $sql);
     confirm_result_set($result);
@@ -659,11 +699,34 @@ function update_inventory_stocks($ProductCode,$quantity){
       db_disconnect($db);
       exit;
     }
-
   }
+  function update_po_status_on_close($id,$actual_po_total,$supplier_total,$date = ''){
+    global $db;
+
+
+    $sql = "UPDATE purchase_orders SET ";
+    $sql .= "status ='"  . db_escape($db, 'Closed') . "', ";
+    $sql .= "actual_po_total ='"  . db_escape($db, $actual_po_total) . "', ";
+    $sql .= "supplier_total ='"  . db_escape($db, $supplier_total) . "', ";
+    $sql .= "received_on ='"  . db_escape($db, $date) . "' ";
+    $sql .= "WHERE purchase_order_id='" . db_escape($db, $id) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+    // For UPDATE statements, $result is true/falses
+
+    if($result) {
+      return true;
+    } else {
+      // UPDATE failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
   function sums($id){
     global $db;
-    $sql = "SELECT SUM(quantity) as sumQty,SUM(received) as sumQtyReceived FROM po_products ";
+    $sql = "SELECT SUM(quantity) as sumQty,SUM(received) as sumQtyReceived, SUM(cost*received) as sumActualAmount FROM po_products ";
     $sql.= "WHERE po_id='" . db_escape($db, $id) . "' ";
 
      $result = mysqli_query($db, $sql);
@@ -674,4 +737,174 @@ function update_inventory_stocks($ProductCode,$quantity){
   }
 
 
+  //Stock Adjustments
+  function insert_adjustment($adjustment){
+    global $db;
+
+    // $errors = validate_store($store);
+    // if(!empty($errors)) {
+    //   return $errors;
+    // }
+
+    $sql = "INSERT INTO stock_adjustments ";
+    // $sql .= "(Ref_Id,ProductCode,Reason,StockCount,Status) ";
+    $sql .= "(Ref_Id,ProductCode,Reason,StockCount,StockAfter) ";
+    $sql .= "VALUES (";
+    $sql .= "'" . db_escape($db, $adjustment['RefId']) . "',";
+    $sql .= "'" . db_escape($db, $adjustment['ProductCode']) . "',";
+    $sql .= "'" . db_escape($db, $adjustment['Reason']) . "',";
+    $sql .= "'" . db_escape($db, $adjustment['StockCount']) . "',";
+    $sql .= "'" . db_escape($db, $adjustment['StockAfter']) . "'";
+    // $sql .= "'" . db_escape($db, 'Pending') . "'";
+    $sql .= ")";
+    $result = mysqli_query($db, $sql);
+    // For INSERT statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // INSERT failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
+  function find_all_stock_adjustments($options=[]) {
+    global $db;
+
+    $sql = "SELECT * FROM stock_adjustments ";   
+
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    return $result;
+  }
+ 
+ //Brands
+   function find_all_brands($search = null, $options=[]) {
+    global $db;
+
+    $sql = "SELECT * FROM brands ";
+    if(!empty($search)){
+      $sql .= "WHERE BrandName = '" . db_escape($db,$search) . "' ";
+    }
+    $sql .= "ORDER BY Id ASC";
+    //echo $sql;
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    return $result;
+  }
+
+
+  function find_brand_by_id($id, $options=[]) {
+    global $db;
+
+    $sql = "SELECT * FROM brands ";
+    $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
+
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    $brand = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
+    return $brand; // returns an assoc. array
+  }
+
+  function validate_brand($brand) {
+    $errors = [];
+
+
+    if(is_blank($brand['BrandName'])) {
+      $errors[] = "Brand name cannot be blank.";
+    }
+    
+    return $errors;
+  }
+ function insert_brand($brand) {
+    global $db;
+
+    $errors = validate_brand($brand);
+    if(!empty($errors)) {
+      return $errors;
+    }
+
+    $sql = "INSERT INTO brands ";
+    $sql .= "(BrandName, Description) ";
+    $sql .= "VALUES (";
+    $sql .= "'" . db_escape($db, $brand['BrandName']) . "',";
+    $sql .= "'" . db_escape($db, $brand['Description']) . "'";
+    $sql .= ")";
+    $result = mysqli_query($db, $sql);
+    // For INSERT statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // INSERT failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
+  function update_brand($brand) {
+    global $db;
+
+    
+    $errors = validate_brand($brand);
+    if(!empty($errors)) {
+      return $errors;
+    }
+
+
+    $sql = "UPDATE brands SET ";
+    $sql .= "BrandName='" . db_escape($db, $brand['BrandName']) . "', ";
+    $sql .= "Description='" . db_escape($db, $brand['Description']) . "' ";
+    $sql .= "WHERE Id='" . db_escape($db, $brand['Id']) . "' ";
+    $sql .= "LIMIT 1";
+
+    $result = mysqli_query($db, $sql);
+    // For UPDATE statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // UPDATE failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+
+  }
+
+   function delete_brand($id) {
+    global $db;
+
+    $sql = "DELETE FROM brands ";
+    $sql .= "WHERE Id='" . db_escape($db, $id) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+    // For DELETE statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // DELETE failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
+  //users
+  function find_user_by_username($username){
+    global $db;
+
+    $sql = "SELECT * FROM users ";
+    $sql .= "WHERE username='" . db_escape($db, $username) . "' ";
+    
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    $user = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
+    return $user;
+  }
+
+
+ 
 ?>

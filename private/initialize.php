@@ -23,7 +23,7 @@ session_start();
   require_once('db_functions.php');
   require_once('query_functions.php');
   require_once('validation_functions.php');
-  // require_once('auth_functions.php');
+  require_once('auth_functions.php');
 
   $db = db_connect();
   $errors = [];
