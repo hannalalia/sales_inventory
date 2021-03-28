@@ -43,21 +43,21 @@ function is_get_request() {
   return $_SERVER['REQUEST_METHOD'] == 'GET';
 }
 
-// function display_errors($errors=array()) {
-//   $output = '';
+function display_errors($errors=array()) {
+  $output = '';
  
-//   if(!empty($errors)) {
-//     $output .= "<div class='alert alert-danger' role='alert'>";
-//     $output .= "Please fix the following errors:";
-//     $output .= "<ul>";
-//     foreach($errors as $error) {
-//       $output .= "<li>" . h($error) . "</li>";
-//     }
-//     $output .= "</ul>";
-//     $output .= "</div>";
-//   }
-//   return $output;
-// }
+  if(!empty($errors)) {
+    $output .= "<div class='alert alert-danger text-center' w-100 my-3 role='alert'>";
+    $output .= "Please fix the following errors:";
+    $output .= "<br>";
+    foreach($errors as $error) {
+      $output .=  h($error);
+      $output .= "<br>";
+    }
+    $output .= "</div>";
+  }
+  return $output;
+}
 
 
 
