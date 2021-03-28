@@ -1,0 +1,24 @@
+.sidebar{
+height: 100vh;
+padding: 2rem;
+}
+.sidebar li{
+	list-style: none;
+	line-height: 40px;
+	word-wrap: break-word;
+}
+.sidebar li a{
+	display: block;
+	text-decoration:none;
+}
+.btn{
+	box-shadow: none !important;
+}
+
+@media screen and (max-width: 767px){	
+	.sidebar{
+		z-index: 1;
+		height: 100vh;
+		position: absolute;
+	}
+}
